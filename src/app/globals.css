@@ -284,3 +284,33 @@ input[type=range]::-webkit-slider-runnable-track {
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .main-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .mode-card {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .st-button,
+  .st-button-secondary {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Ensure inputs don't zoom on iOS (needs 16px) */
+  .st-input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
