@@ -17,7 +17,9 @@ export default function RootLayout({
       <body
         className={`antialiased font-sans`}
       >
-        {children}
+        <div className="app-wrapper">
+          {children}
+        </div>
       </body>
     </html>
   );

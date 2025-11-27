@@ -774,7 +774,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
             </div>
 
             {/* Progress Bar */}
-            <div className="mb-8">
+            <div className="section mb-8">
                 <div className="flex justify-between text-sm text-[#cbd5e0] mb-2 font-medium">
                     <span><strong>Step 3.{subStep} of 3.{totalPages}</strong>: Usage Details</span>
                 </div>
@@ -793,7 +793,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 {currentPage.subtitle}
             </p>
 
-            <div className="space-y-6">
+            <div className="section space-y-6">
                 {currentPage.items.map(item => renderAppliance(item))}
             </div>
 

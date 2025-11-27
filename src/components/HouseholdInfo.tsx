@@ -117,7 +117,7 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
             </div>
 
             {/* Progress */}
-            <div className="mb-8">
+            <div className="section mb-8">
                 <div className="flex justify-between text-sm text-[#cbd5e0] mb-2 font-medium">
                     <span>Step 1 of 4: Household Information</span>
                     <span>{mode === 'quick' ? 'Quick Estimate' : 'Detailed Estimate'}</span>
@@ -127,7 +127,7 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                 </div>
             </div>
 
-            <div className="mb-8">
+            <div className="section mb-8">
                 <h2 className="text-xl font-normal text-slate-400 tracking-wide mb-6">
                     Detailed Estimate - Basic Information
                 </h2>

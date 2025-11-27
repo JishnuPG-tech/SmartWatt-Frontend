@@ -425,7 +425,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
             </div>
 
             {/* Analysis Summary Banner */}
-            <div className="bg-[#1a1f3a] border border-[#60a5fa]/30 p-6 rounded-xl mb-8">
+            <div className="section bg-[#1a1f3a] border border-[#60a5fa]/30 p-6 rounded-xl mb-8">
                 <div className="text-sm text-[#cbd5e0] mb-4">
                     <span className="font-medium text-white">AI Analysis Complete</span> | Household: {household.num_people} people | Monthly: {(household.kwh / 2).toFixed(1)} kWh (~₹{Math.floor(billDetails.total / 2)}) | Bi-monthly KSEB Bill: ₹{Math.floor(billDetails.total)}
                 </div>
@@ -467,7 +467,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
             </div>
 
             {/* KSEB Details Expander */}
-            <details className="group mb-8 bg-[#1a202c] border border-slate-700 rounded-md overflow-hidden">
+            <details className="section group mb-8 bg-[#1a202c] border border-slate-700 rounded-md overflow-hidden">
                 <summary className="flex items-center justify-between p-4 cursor-pointer bg-gradient-to-r from-[#1a1f3a] to-[#0f1419] hover:bg-slate-800 transition-colors list-none">
                     <div className="flex items-center gap-2 text-white font-medium">
                         <ChevronRight className="w-5 h-5 transition-transform group-open:rotate-90" />
@@ -486,7 +486,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
             {/* Breakdown Table */}
             <h2 className="text-white text-2xl font-medium mb-4">Appliance-wise Breakdown</h2>
 
-            <div className="bg-[#1a202c] border border-slate-700 rounded-xl p-6 mb-8">
+            <div className="section bg-[#1a202c] border border-slate-700 rounded-xl p-6 mb-8">
                 <div className="mb-4">
                     <p className="text-green-400 font-medium">✓ KSEB Bill Calculation Complete</p>
                     <ul className="text-sm text-slate-400 mt-2 space-y-1">
@@ -566,7 +566,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
 
             {/* Visual Analysis Charts */}
             <h2 className="text-white text-2xl font-medium mb-4">Visual Analysis</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="section grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Donut Chart - Energy Distribution */}
                 <div className="bg-[#1a202c] border border-slate-700 rounded-xl p-4 overflow-hidden">
                     <h3 className="text-slate-300 font-medium mb-2 text-center">Energy Distribution (kWh)</h3>

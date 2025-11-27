@@ -90,7 +90,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
             </div>
 
             {/* Progress */}
-            <div className="mb-8">
+            <div className="section mb-8">
                 <div className="flex justify-between text-sm text-[#cbd5e0] mb-2 font-medium">
                     <span>Step 2 of 4: Select Your Appliances</span>
                     <span>Detailed Estimate</span>
@@ -105,7 +105,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
             </h2>
             <p className="text-[#e2e8f0] mb-8">Select all appliances you have at home</p>
 
-            <div className="space-y-8">
+            <div className="section space-y-8">
                 {categories.map((cat) => (
                     <div key={cat.title}>
                         <h3 className="text-[#e2e8f0] font-medium text-lg mb-4">{cat.title}</h3>
@@ -130,7 +130,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
             </div>
 
             {/* Common Items */}
-            <div className="mt-8">
+            <div className="section mt-8">
                 <h3 className="text-[#e2e8f0] font-medium text-lg mb-4">Common Items</h3>
 
                 <div className="space-y-6">
