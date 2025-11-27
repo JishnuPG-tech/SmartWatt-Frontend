@@ -417,7 +417,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
     groupedBreakdown.sort((a, b) => b.kwh - a.kwh);
 
     return (
-        <div className="w-full max-w-5xl mx-auto animate-in fade-in duration-700">
+        <div className="w-full max-w-5xl mx-auto px-4 animate-in fade-in duration-700">
             {/* Header */}
             <div className="main-header">
                 <h1>SMARTWATT AI</h1>

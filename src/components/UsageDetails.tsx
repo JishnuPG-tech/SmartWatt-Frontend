@@ -235,13 +235,14 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
 
     if (totalPages === 0) {
         return (
-            <div className="w-full max-w-4xl mx-auto text-center py-12">
+            <div className="w-full max-w-4xl mx-auto px-4 text-center py-12">
                 <div className="main-header"><h1>SMARTWATT</h1></div>
                 <div className="st-alert-info mb-6">No appliances selected for detailed analysis.</div>
                 <button onClick={onNext} className="st-button">Calculate Results →</button>
             </div>
         );
     }
+
 
     const currentPage = pages[subStep - 1];
     const progress = (subStep / (totalPages + 1)) * 100;
@@ -766,7 +767,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto animate-in slide-in-from-right-8 duration-500">
+        <div className="w-full max-w-4xl mx-auto px-4 animate-in slide-in-from-right-8 duration-500">
             <div className="main-header text-center mb-8">
                 <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 mb-2">SMARTWATT</h1>
                 <p className="text-slate-400">Kerala Energy Estimator</p>

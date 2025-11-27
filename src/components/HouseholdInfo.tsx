@@ -109,7 +109,7 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
     ];
 
     return (
-        <div className="w-full max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="w-full max-w-3xl mx-auto px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
             <div className="main-header text-center mb-8">
                 <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 mb-2">SMARTWATT</h1>

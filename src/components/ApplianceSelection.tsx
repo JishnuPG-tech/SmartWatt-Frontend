@@ -83,7 +83,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
     ];
 
     return (
-        <div className="w-full max-w-4xl mx-auto animate-in fade-in slide-in-from-right-8 duration-700">
+        <div className="w-full max-w-4xl mx-auto px-4 animate-in fade-in slide-in-from-right-8 duration-700">
             <div className="main-header text-center mb-8">
                 <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 mb-2">SMARTWATT</h1>
                 <p className="text-slate-400">Kerala Energy Estimator</p>
