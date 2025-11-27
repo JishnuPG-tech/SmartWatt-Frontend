@@ -78,12 +78,17 @@ async function verifyPersistence() {
     // 5. Verify Update
     console.log("🔍 Verifying Update...");
     // Wait a bit for propagation? usually instant for single read
-    const reloadedData = await loadTraining(TEST_USER_ID);
+    const { data: reloadedData, error: reloadError } = await loadTraining(TEST_USER_ID);
 
-    if (reloadedData.num_people === 5 &&
-        reloadedData.bi_monthly_kwh === 500 &&
-        reloadedData.selected_appliances.includes("fridge") &&
-        reloadedData.appliance_usage.fridge_hours === 24) {
+    if (reloadError) {
+        console.error("❌ Reload failed:", reloadError);
+        return;
+    }
+
+    if (reloadedData?.num_people === 5 &&
+        reloadedData?.bi_monthly_kwh === 500 &&
+        reloadedData?.selected_appliances?.includes("fridge") &&
+        reloadedData?.appliance_usage?.fridge_hours === 24) {
         console.log("✅ VERIFICATION SUCCESS: Data persisted correctly!");
     } else {
         console.error("❌ VERIFICATION FAILED: Data mismatch.");
