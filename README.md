@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SmartWatt V2.1 - Frontend ⚡
 
-## Getting Started
+**Physics-Informed Integrated Hybrid AI Architecture for Energy Estimation.**
 
-First, run the development server:
+![SmartWatt Status](https://img.shields.io/badge/Status-Beta-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Next.js](https://img.shields.io/badge/Next.js-15.0-black)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+SmartWatt is a next-generation residential energy estimation tool designed for Kerala households. It solves the "Linear Load Paradox" by combining Deep Learning (for complex loads like ACs and Fridges) with Physics-based constraints (for linear loads like Fans and Lights).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This repository contains the **Frontend** built with [Next.js](https://nextjs.org/), offering a responsive, modern interface for users to input their appliance details and receive highly accurate bill predictions.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Features
 
-## Learn More
+-   **Hybrid AI Interface**: Seamlessly gathers user inputs that feed into our Dual-Inference Engine.
+-   **Dynamic Dashboard**: Visualizes energy consumption with interactive charts (Recharts/Plotly).
+-   **Smart Recommendations**: Provides AI-generated insights to reduce electricity bills (e.g., "Switching to a 5-star AC saves ₹400/month").
+-   **User Intent Override**: Respects manual usage inputs while intelligently adjusting efficiency factors in the background.
+-   **Responsive Design**: Optimized for both Desktop and Mobile devices.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   **Framework**: [Next.js](https://nextjs.org/) (React)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+-   **Visualization**: [Recharts](https://recharts.org/), Plotly.js
+-   **State Management**: React Hooks
+-   **Language**: TypeScript
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Getting Started
 
-## Deploy on Vercel
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/JishnuPG-tech/SmartWatt-Frontend.git
+    cd SmartWatt-Frontend
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+4.  **Open in Browser:**
+    Navigate to [http://localhost:3000](http://localhost:3000).
+
+## 🚀 Deployment
+
+This project is optimized for deployment on **Vercel**.
+
+1.  Push your code to GitHub.
+2.  Import the repository into Vercel.
+3.  Set the `NEXT_PUBLIC_BACKEND_URL` environment variable to your backend URL (e.g., your Render hosted API).
+4.  Click **Deploy**.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+*Developed by the SmartWatt AI Team.*
