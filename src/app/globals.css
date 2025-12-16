@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+:root {
+  --background-start: #0a0e27;
+  --background-mid: #151a2e;
+  --background-end: #0f1419;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent-blue: #60a5fa;
+  --border-color: rgba(71, 85, 105, 0.3);
+}
+
+/* Force Tailwind colors to Hex for html2canvas compatibility */
+@theme {
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e0;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  --color-blue-200: #bfdbfe;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-900: #1e3a8a;
+
+  --color-green-200: #bbf7d0;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-900: #14532d;
+
+  --color-red-200: #fecaca;
+  --color-red-500: #ef4444;
+  --color-red-900: #7f1d1d;
+}
+
+body {
+  color: var(--text-primary);
+  background: linear-gradient(180deg, var(--background-start) 0%, var(--background-mid) 50%, var(--background-end) 100%);
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+}
+
+/* 1. Responsive Container */
+.app-wrapper {
+  width: 100%;
+  max-width: 100%;
+  /* Auto adjusts for mobile */
+  margin: auto;
+  padding: 12px;
+}
+
+/* Typography */
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  letter-spacing: 2px;
+  font-size: clamp(22px, 5vw, 32px);
+  /* Auto scaling */
+}
+
+h2,
+h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-size: clamp(18px, 4vw, 28px);
+  /* Auto scaling */
+}
+
+p {
+  font-size: clamp(14px, 3.5vw, 18px);
+  /* Auto scaling */
+}
+
+h4,
+h5,
+h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+/* Main Header - Exact match from app.py */
+.main-header {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #1a1f3a 0%, #0d1117 100%);
+  color: white;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.main-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.main-header p {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}
+
+/* Mode Selection Cards - Exact match from app.py */
+.mode-card {
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 4px;
+  padding: 2.5rem;
+  background: linear-gradient(145deg, #1a1f3a 0%, #0f1419 100%);
+  color: #e2e8f0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mode-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 12px 48px rgba(37, 99, 235, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(145deg, #1e2340 0%, #13151f 100%);
+}
+
+.mode-card h2 {
+  color: #60a5fa;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  letter-spacing: 2px;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.mode-card hr {
+  border-color: rgba(71, 85, 105, 0.3);
+  margin: 1.5rem 0;
+  border-top-width: 1px;
+}
+
+.mode-card ul {
+  color: #94a3b8;
+  line-height: 1.8;
+  font-size: 0.9rem;
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.mode-card p {
+  color: #cbd5e0;
+  font-weight: 300;
+  line-height: 1.5;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Buttons - Exact match from app.py */
+.st-button {
+  width: 100%;
+  border-radius: 2px;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: white;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.st-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.st-button-secondary {
+  width: 100%;
+  border-radius: 2px;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.st-button-secondary:hover {
+  border-color: #60a5fa;
+  background: rgba(30, 58, 138, 0.2);
+}
+
+/* Inputs - Exact match from app.py */
+.st-input {
+  background-color: rgba(26, 31, 58, 0.5);
+  color: #e2e8f0;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  font-family: 'Inter', sans-serif;
+  border-radius: 2px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.st-input:focus {
+  border-color: rgba(96, 165, 250, 0.5);
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.2);
+}
+
+.st-label {
+  color: #cbd5e0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Cards & Boxes */
+.st-card {
+  border: 1px solid #2d3748;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #1a202c;
+  color: #e2e8f0;
+}
+
+/* 2. Auto-Resize Cards */
+.card {
+  width: 100%;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+/* Auto-Resize Buttons */
+button {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  padding: 10px 14px;
+  font-size: 1rem;
+}
+
+.st-alert-info {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(15, 20, 25, 0.8) 100%);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-left: 3px solid #3b82f6;
+  border-radius: 2px;
+  padding: 1rem;
+  color: #e2e8f0;
+}
+
+/* Range Slider Customization */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #60a5fa;
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+  border-radius: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0e1117;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .main-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .mode-card {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .st-button,
+  .st-button-secondary {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Ensure inputs don't zoom on iOS (needs 16px) */
+  .st-input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* 4. Mobile Breakpoints */
+@media (max-width: 600px) {
+  .section {
+    padding: 10px !important;
+    margin: 8px 0;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
