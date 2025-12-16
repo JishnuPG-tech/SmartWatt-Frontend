@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { saveTraining } from '@/lib/saveTraining';
+import { Check } from 'lucide-react';
+
 
 interface Props {
     selected: string[];
@@ -128,7 +130,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                                     onClick={() => toggleAppliance(item.id)}
                                 >
                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                        {selected.includes(item.id) && <span className="text-white text-xs">✓</span>}
+                                        {selected.includes(item.id) && <Check className="w-3.5 h-3.5 text-white" />}
                                     </div>
                                     <span className="text-[#e2e8f0] flex-1 select-none">
                                         {item.label}
@@ -178,7 +180,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                             onClick={() => toggleAppliance('led_lights')}
                         >
                             <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('led_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('led_lights') && <span className="text-white text-xs">✓</span>}
+                                {selected.includes('led_lights') && <Check className="w-3.5 h-3.5 text-white" />}
                             </div>
                             <span className="text-[#e2e8f0] flex-1 select-none">LED Bulbs</span>
                         </div>
@@ -209,7 +211,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                             onClick={() => toggleAppliance('cfl_lights')}
                         >
                             <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('cfl_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('cfl_lights') && <span className="text-white text-xs">✓</span>}
+                                {selected.includes('cfl_lights') && <Check className="w-3.5 h-3.5 text-white" />}
                             </div>
                             <span className="text-[#e2e8f0] flex-1 select-none">CFL Bulbs</span>
                         </div>
@@ -240,7 +242,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                             onClick={() => toggleAppliance('tube_lights')}
                         >
                             <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('tube_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('tube_lights') && <span className="text-white text-xs">✓</span>}
+                                {selected.includes('tube_lights') && <Check className="w-3.5 h-3.5 text-white" />}
                             </div>
                             <span className="text-[#e2e8f0] flex-1 select-none">Tube Lights</span>
                         </div>

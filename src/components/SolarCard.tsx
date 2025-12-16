@@ -1,3 +1,5 @@
+import { Sun, Percent } from 'lucide-react';
+
 export default function SolarCard({ householdKwh, totalBill }: { householdKwh: number, totalBill: number }) {
     // 1. SCIENTIFIC SIZING LOGIC 📐 (The "Right Size" Formula)
     // We don't guess. We calculate based on physics.
@@ -43,7 +45,7 @@ export default function SolarCard({ householdKwh, totalBill }: { householdKwh: n
             <div className="bg-yellow-900/20 px-6 py-4 border-b border-yellow-500/20 flex justify-between items-center backdrop-blur-sm">
                 <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-yellow-500/20 grid place-items-center border border-yellow-500/40">
-                        <span className="text-lg">☀️</span>
+                        <Sun className="w-5 h-5 text-yellow-400" />
                     </div>
                     <div>
                         <h3 className="text-sm font-bold text-yellow-100 uppercase tracking-widest">Scientific Solar Plan</h3>
@@ -105,7 +107,7 @@ export default function SolarCard({ householdKwh, totalBill }: { householdKwh: n
 
                         <div className="flex items-center gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
                             <div className="h-10 w-10 flex-shrink-0 bg-yellow-500 rounded flex items-center justify-center font-bold text-black text-xl">
-                                %
+                                <Percent className="w-6 h-6 text-black" />
                             </div>
                             <div className="flex-grow">
                                 <h4 className="text-white font-bold text-sm">Return on Investment</h4>

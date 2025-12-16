@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getPhysicsRatio, getExactModeWatts } from '@/lib/energyUtils';
+import { Zap, X, Check } from 'lucide-react';
 
 interface TestScenario {
     name: string;
@@ -89,7 +90,7 @@ export default function VerificationDashboard({ onClose }: { onClose: () => void
             <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto">
                 <div className="p-6 border-b border-slate-800 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <span className="text-emerald-400">⚡</span> Automated Logic Verification
+                        <Zap className="w-5 h-5 text-emerald-400" /> Automated Logic Verification
                     </h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-white">✕</button>
                 </div>
@@ -123,11 +124,11 @@ export default function VerificationDashboard({ onClose }: { onClose: () => void
                                         <td className="py-4 text-center">
                                             {res.passed ? (
                                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium">
-                                                    ✓ PASS
+                                                    <Check className="w-3 h-3" /> PASS
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-medium">
-                                                    ✕ FAIL
+                                                    <X className="w-3 h-3" /> FAIL
                                                 </span>
                                             )}
                                         </td>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { saveTraining } from '@/lib/saveTraining';
 import { normalizePattern } from '@/lib/normalizePattern';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, AlertTriangle, AlertCircle, Info } from 'lucide-react';
 
 interface Props {
     selected: string[];
@@ -203,12 +203,17 @@ function ApplianceDetailCard({
             </div>
 
             {alert && (
-                <div className={`mt-4 p-4 rounded border-l-4 ${alert.type === "warning" ? "bg-orange-900/20 border-orange-500 text-orange-200" :
+                <div className={`mt-4 p-4 rounded-lg border-l-4 flex items-start gap-3 ${alert.type === "warning" ? "bg-orange-900/20 border-orange-500 text-orange-200" :
                     alert.type === "error" ? "bg-red-900/20 border-red-500 text-red-200" :
                         "bg-blue-900/20 border-blue-500 text-blue-200"
                     }`}>
-                    <p className="text-sm flex items-start gap-2">
-                        <span>{alert.message}</span>
+                    <div className="shrink-0 mt-0.5">
+                        {alert.type === 'error' && <AlertCircle className="w-5 h-5" />}
+                        {alert.type === 'warning' && <AlertTriangle className="w-5 h-5" />}
+                        {alert.type === 'info' && <Info className="w-5 h-5" />}
+                    </div>
+                    <p className="text-sm leading-relaxed">
+                        {alert.message}
                     </p>
                 </div>
             )}
@@ -244,25 +249,25 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
 
         // AC Logic
         if (name === 'ac') {
-            if (hours > 16) return { type: "error", message: "⚠️ Critical: continuous AC usage (>16h) will drastically spike your bill." };
+            if (hours > 16) return { type: "error", message: "Critical: continuous AC usage (>16h) will drastically spike your bill." };
             if (hours > 12) return { type: "warning", message: "Notice: High AC usage detected. Expect a significant impact on your monthly bill." };
         }
 
         // Geyser Logic
         if (name === 'geyser') {
-            if (hours > 3) return { type: "error", message: "⚠️ Critical: Geyser running >3 hours/day is extremely expensive." };
+            if (hours > 3) return { type: "error", message: "Critical: Geyser running >3 hours/day is extremely expensive." };
             if (hours > 1.5) return { type: "warning", message: "Warning: Most households only need 30-60 mins of geyser usage per day." };
         }
 
         // Pump Logic
         if (name === 'pump') {
-            if (hours > 2) return { type: "error", message: "⚠️ Critical: Water Pump > 2 hours? Check for leaks or float valve failure." };
+            if (hours > 2) return { type: "error", message: "Critical: Water Pump > 2 hours? Check for leaks or float valve failure." };
             if (hours > 1) return { type: "warning", message: "Notice: Pump usage is higher than average (30-45 mins)." };
         }
 
         // Induction Logic
         if (name === 'induction') {
-            if (hours > 3) return { type: "error", message: "⚠️ Heavy Load: Induction > 3 hours makes electricity costlier than LPG." };
+            if (hours > 3) return { type: "error", message: "Heavy Load: Induction > 3 hours makes electricity costlier than LPG." };
             if (hours > 2) return { type: "warning", message: "Warning: High induction usage detected." };
         }
 

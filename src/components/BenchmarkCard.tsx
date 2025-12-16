@@ -1,3 +1,5 @@
+import { Users, Leaf, AlertTriangle } from 'lucide-react';
+
 export default function BenchmarkCard({ householdKwh, numPeople }: { householdKwh: number, numPeople: string }) {
     // --- SOCIAL COMPARISON (The "Neighbor Test") ---
     // Humans care about social status. "Am I doing better than my neighbor?"
@@ -15,7 +17,7 @@ export default function BenchmarkCard({ householdKwh, numPeople }: { householdKw
             {/* Header Bar */}
             <div className="bg-[#1e293b]/50 px-6 py-3 border-b border-[#334155] flex justify-between items-center backdrop-blur-sm">
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🏘️</span>
+                    <Users className="w-5 h-5 text-blue-400" />
                     <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">Community Benchmark</span>
                 </div>
                 <span className="text-xs text-slate-500">Peer Comparison</span>
@@ -32,10 +34,11 @@ export default function BenchmarkCard({ householdKwh, numPeople }: { householdKw
                             </span>
                             <span className="text-slate-500 text-sm font-medium">than neighbors</span>
                         </div>
-                        <div className={`inline-block mt-3 px-3 py-1 rounded-full text-xs font-medium border ${isEfficient ? 'bg-green-500/10 border-green-500/20 text-green-300' : 'bg-orange-500/10 border-orange-500/20 text-orange-300'}`}>
+                        <div className={`inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full text-xs font-medium border ${isEfficient ? 'bg-green-500/10 border-green-500/20 text-green-300' : 'bg-orange-500/10 border-orange-500/20 text-orange-300'}`}>
+                            {isEfficient ? <Leaf className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
                             {isEfficient
-                                ? "Excellent Efficiency Standards! 🌿"
-                                : "High Consumption Detected ⚠️ Check AC/Geyser"}
+                                ? "Excellent Efficiency Standards!"
+                                : "High Consumption Detected - Check AC/Geyser"}
                         </div>
                     </div>
 

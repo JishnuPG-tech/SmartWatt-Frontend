@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { saveTraining } from '@/lib/saveTraining';
+import { Home, Castle, Building2, Sun, CloudRain, Snowflake } from 'lucide-react'; // Imports
 
 interface HouseholdData {
     num_people: number;
@@ -110,9 +111,9 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
     const status = getStatus(monthlyUnits);
 
     const quickSetupOptions = [
-        { id: "small", emoji: "🏠", label: "Small Home", description: "2-3 people, 150-250 units", people: 3, units: 200 },
-        { id: "medium", emoji: "🏡", label: "Medium Home", description: "4-5 people, 300-450 units", people: 4, units: 375 },
-        { id: "large", emoji: "🏰", label: "Large Home", description: "6+ people, 500+ units", people: 6, units: 550 },
+        { id: "small", icon: <Home className="w-6 h-6 text-blue-400" />, label: "Small Home", description: "2-3 people, 150-250 units", people: 3, units: 200 },
+        { id: "medium", icon: <Building2 className="w-6 h-6 text-blue-500" />, label: "Medium Home", description: "4-5 people, 300-450 units", people: 4, units: 375 },
+        { id: "large", icon: <Castle className="w-6 h-6 text-blue-600" />, label: "Large Home", description: "6+ people, 500+ units", people: 6, units: 550 },
     ];
 
     return (
@@ -151,6 +152,7 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                             onClick={() => handleUpdate({ ...data, num_people: option.people, kwh: option.units })}
                             className="flex-1 bg-[#1a202c] hover:bg-[#2c3e50] border border-[#334155] hover:border-[#667eea] rounded-xl p-4 transition-all duration-300 group text-left"
                         >
+                            <div className="mb-3 p-2 bg-slate-800 rounded-lg w-fit group-hover:bg-slate-700 transition-colors">{option.icon}</div>
                             <div className="font-medium text-[#e2e8f0] text-lg mb-1">{option.label}</div>
                             <div className="text-xs text-[#94a3b8]">{option.description}</div>
                         </button>
@@ -185,9 +187,9 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                     </p>
                     <div className="space-y-3">
                         {[
-                            { id: 'summer', label: 'Summer (March - May)' },
-                            { id: 'monsoon', label: 'Monsoon (June - September)' },
-                            { id: 'winter', label: 'Winter (October - February)' }
+                            { id: 'summer', label: 'Summer (March - May)', icon: <Sun className="w-5 h-5 text-orange-400" /> },
+                            { id: 'monsoon', label: 'Monsoon (June - September)', icon: <CloudRain className="w-5 h-5 text-blue-400" /> },
+                            { id: 'winter', label: 'Winter (October - February)', icon: <Snowflake className="w-5 h-5 text-cyan-300" /> }
                         ].map((opt) => (
                             <label
                                 key={opt.id}
@@ -199,9 +201,12 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                                 >
                                     {data.season === opt.id && <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 animate-in zoom-in duration-200" />}
                                 </div>
-                                <span className={`${data.season === opt.id ? 'text-white' : 'text-[#94a3b8]'}`}>
-                                    {opt.label}
-                                </span>
+                                <div className="flex items-center gap-3">
+                                    {opt.icon}
+                                    <span className={`${data.season === opt.id ? 'text-white' : 'text-[#94a3b8]'}`}>
+                                        {opt.label}
+                                    </span>
+                                </div>
                             </label>
                         ))}
                     </div>

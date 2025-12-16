@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { predictAppliance, calculateBill, simulateSavings } from '@/lib/api';
 import { saveTraining } from '@/lib/saveTraining';
 import { getNum, parseFloatVal, parseStar, getPhysicsRatio, getExactModeWatts, PHYSICS_DEFAULTS, distributeEnergyGap } from '@/lib/energyUtils';
-import { Download, ChevronRight, HelpCircle } from 'lucide-react';
+import { Download, ChevronRight, HelpCircle, Zap, Trophy, Sun, CheckCircle, CloudRain, Droplets, AlertTriangle, AppWindow, Snowflake, AlertOctagon, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb, Ban, Sparkles, Tv, Monitor, Laptop, Droplet, Scissors, BarChart3, ClipboardList, Brain, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import SolarCard from './SolarCard';
 import TariffVisualizer from './TariffVisualizer';
@@ -112,13 +112,13 @@ export default function ResultsReport({ household, appliances, details, onRestar
         // Pricing Tier Alert
         if (totalKwh > 500) {
             insights.push({
-                icon: "⚡",
+                icon: <Zap className="w-6 h-6 text-red-500" />,
                 color: "text-red-300",
                 msg: "High Usage Alert: Total consumption exceeds 500 units. You are in the highest pricing slab where rates peak."
             });
         } else if (totalKwh < 150) {
             insights.push({
-                icon: "🏆",
+                icon: <Trophy className="w-6 h-6 text-green-500" />,
                 color: "text-green-300",
                 msg: "Eco Champion: Your total consumption is under 150 units. Excellent energy management!"
             });
@@ -129,17 +129,17 @@ export default function ResultsReport({ household, appliances, details, onRestar
             if (appliances.includes('air_conditioner') || appliances.includes('ac')) {
                 const acHours = getNum(details.ac_hours);
                 if (acHours > 8) {
-                    insights.push({ icon: "☀️", color: "text-orange-300", msg: "Summer Critical: AC usage > 8 hrs significantly increases cooling costs. Use curtains to block solar heat." });
+                    insights.push({ icon: <Sun className="w-6 h-6 text-orange-500" />, color: "text-orange-300", msg: "Summer Critical: AC usage > 8 hrs significantly increases cooling costs. Use curtains to block solar heat." });
                 } else {
-                    insights.push({ icon: "✅", color: "text-green-300", msg: "Summer Smart: Keeping AC use minimal during peak heat is the best way to save bills." });
+                    insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Summer Smart: Keeping AC use minimal during peak heat is the best way to save bills." });
                 }
             }
         } else if (season === 'monsoon') {
             if (appliances.includes('washing_machine')) {
-                insights.push({ icon: "🌧️", color: "text-blue-200", msg: "High Humidity: Use extra spin cycle only if clothes are not drying due to moisture." });
+                insights.push({ icon: <CloudRain className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "High Humidity: Use extra spin cycle only if clothes are not drying due to moisture." });
             }
             if (appliances.includes('ac')) {
-                insights.push({ icon: "💧", color: "text-blue-200", msg: "Humidity CTRL: Use AC 'Dry Mode' to remove moisture efficiently without over-cooling." });
+                insights.push({ icon: <Droplets className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Humidity CTRL: Use AC 'Dry Mode' to remove moisture efficiently without over-cooling." });
             }
         }
 
@@ -151,19 +151,19 @@ export default function ResultsReport({ household, appliances, details, onRestar
             const star = parseInt(details.ac_star || '3');
             const type = getStr(details.ac_type);
 
-            if (star < 4) insights.push({ icon: "⚠️", color: "text-yellow-300", msg: `AC Efficiency: Your ${star} -Star AC consumes more power.Consider upgrading to a 5 - Star model.` });
-            if (type === 'window') insights.push({ icon: "🪟", color: "text-orange-300", msg: "AC Type: Window units often have poorer insulation sealing than Split units." });
+            if (star < 4) insights.push({ icon: <AlertTriangle className="w-6 h-6 text-yellow-500" />, color: "text-yellow-300", msg: `AC Efficiency: Your ${star} -Star AC consumes more power.Consider upgrading to a 5 - Star model.` });
+            if (type === 'window') insights.push({ icon: <AppWindow className="w-6 h-6 text-orange-500" />, color: "text-orange-300", msg: "AC Type: Window units often have poorer insulation sealing than Split units." });
 
-            if (hours > 10) insights.push({ icon: "❄️", color: "text-red-300", msg: `AC Overload: Running ${hours} hrs / day.Try setting temperature to 26°C to save ~15 %.` });
-            else if (hours < 4) insights.push({ icon: "❄️", color: "text-green-300", msg: "AC Optimized: Low daily usage detected. Good use of natural ventilation." });
+            if (hours > 10) insights.push({ icon: <Snowflake className="w-6 h-6 text-cyan-400" />, color: "text-red-300", msg: `AC Overload: Running ${hours} hrs / day.Try setting temperature to 26°C to save ~15 %.` });
+            else if (hours < 4) insights.push({ icon: <Snowflake className="w-6 h-6 text-green-400" />, color: "text-green-300", msg: "AC Optimized: Low daily usage detected. Good use of natural ventilation." });
         }
 
         // 2. Refrigerator
         if (appliances.includes('refrigerator') || appliances.includes('fridge')) {
             const age = getNum(details.fridge_age?.toString().split(' ')[0] || 5);
 
-            if (age > 10) insights.push({ icon: "🛑", color: "text-red-300", msg: `Old Fridge: ${age} + years old.Efficiency drops significantly after 10 years.Planning a replacement ? ` });
-            else insights.push({ icon: "🧊", color: "text-green-300", msg: "Healthy Fridge: Modern unit detected. Keep coils clean for max efficiency." });
+            if (age > 10) insights.push({ icon: <AlertOctagon className="w-6 h-6 text-red-500" />, color: "text-red-300", msg: `Old Fridge: ${age} + years old.Efficiency drops significantly after 10 years.Planning a replacement ? ` });
+            else insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Healthy Fridge: Modern unit detected. Keep coils clean for max efficiency." });
         }
 
         // 3. Washing Machine
@@ -171,128 +171,128 @@ export default function ResultsReport({ household, appliances, details, onRestar
             const hours = getNum(details.wm_hours);
             const type = getStr(details.wm_type);
 
-            if (type.includes('top')) insights.push({ icon: "🧺", color: "text-blue-200", msg: "Washer Type: Top loads use more water/heating energy than Front loads." });
-            if (hours > 1.5) insights.push({ icon: "⚠️", color: "text-yellow-300", msg: "High Wash Load: >1.5 hrs/daily average? Ensure you run full loads only." });
+            if (type.includes('top')) insights.push({ icon: <Shirt className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Washer Type: Top loads use more water/heating energy than Front loads." });
+            if (hours > 1.5) insights.push({ icon: <AlertTriangle className="w-6 h-6 text-yellow-500" />, color: "text-yellow-300", msg: "High Wash Load: >1.5 hrs/daily average? Ensure you run full loads only." });
         }
 
         // 4. Geyser / Water Heater
         if (appliances.includes('geyser') || appliances.includes('water_heater')) {
             const hours = getNum(details.geyser_hours);
-            if (hours > 1.5) insights.push({ icon: "🔥", color: "text-red-300", msg: "Heating Alert: Geysers are top energy consumers. Limit use to mornings or install a timer." });
-            else if (hours < 0.5) insights.push({ icon: "✅", color: "text-green-300", msg: "Efficient Heating: Quick showers save massive energy." });
+            if (hours > 1.5) insights.push({ icon: <Flame className="w-6 h-6 text-red-500" />, color: "text-red-300", msg: "Heating Alert: Geysers are top energy consumers. Limit use to mornings or install a timer." });
+            else if (hours < 0.5) insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Efficient Heating: Quick showers save massive energy." });
         }
 
         // 5. Microwave
         if (appliances.includes('microwave')) {
             const hours = getNum(details.microwave_hours);
-            if (hours > 1) insights.push({ icon: "🍲", color: "text-yellow-200", msg: "Microwave: Efficient for reheating, but prolonged cooking costs more than gas." });
+            if (hours > 1) insights.push({ icon: <Utensils className="w-6 h-6 text-yellow-500" />, color: "text-yellow-200", msg: "Microwave: Efficient for reheating, but prolonged cooking costs more than gas." });
         }
 
         // 6. Kettle
         if (appliances.includes('kettle')) {
             const hours = getNum(details.kettle_hours);
-            if (hours > 1) insights.push({ icon: "☕", color: "text-orange-300", msg: "Kettle: Boiling more water than needed? That's wasted kilowatt-hours." });
+            if (hours > 1) insights.push({ icon: <Coffee className="w-6 h-6 text-orange-500" />, color: "text-orange-300", msg: "Kettle: Boiling more water than needed? That's wasted kilowatt-hours." });
         }
 
         // 7. Induction Cooktop
         if (appliances.includes('induction')) {
             const hours = getNum(details.induction_hours);
-            if (hours > 2) insights.push({ icon: "🍳", color: "text-red-300", msg: "Induction Heavy Use: >2 hours/day makes it costlier than Gas/LPG cooking." });
-            else if (hours < 0.5) insights.push({ icon: "✅", color: "text-green-300", msg: "Induction Smart: Using it for quick boiling only is cost-effective." });
+            if (hours > 2) insights.push({ icon: <Flame className="w-6 h-6 text-red-500" />, color: "text-red-300", msg: "Induction Heavy Use: >2 hours/day makes it costlier than Gas/LPG cooking." });
+            else if (hours < 0.5) insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Induction Smart: Using it for quick boiling only is cost-effective." });
         }
 
         // 8. Rice Cooker
         if (appliances.includes('rice_cooker')) {
             const hours = getNum(details.rice_cooker_hours);
-            if (hours > 1.5) insights.push({ icon: "🍚", color: "text-yellow-300", msg: "Rice Cooker: Avoid 'Warm Mode' for long durations after cooking is done." });
+            if (hours > 1.5) insights.push({ icon: <Utensils className="w-6 h-6 text-yellow-500" />, color: "text-yellow-300", msg: "Rice Cooker: Avoid 'Warm Mode' for long durations after cooking is done." });
         }
 
         // 9. Toaster
         if (appliances.includes('toaster')) {
             const hours = getNum(details.toaster_hours);
-            if (hours > 0.5) insights.push({ icon: "🍞", color: "text-blue-200", msg: "Toaster: High usage. Ensure you toast multiple slices in one go." });
+            if (hours > 0.5) insights.push({ icon: <Utensils className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Toaster: High usage. Ensure you toast multiple slices in one go." });
         }
 
         // 10. Food Processor
         if (appliances.includes('food_processor')) {
             const hours = getNum(details.food_processor_hours);
-            if (hours > 1) insights.push({ icon: "🔪", color: "text-blue-200", msg: "Food Processor: Heavy usage detected. Good for bulk prep!" });
+            if (hours > 1) insights.push({ icon: <Utensils className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Food Processor: Heavy usage detected. Good for bulk prep!" });
         }
 
         // 11. Ceiling Fans
         const numFans = getNum(details.num_fans);
         if (numFans > 0) {
             const hours = getNum(details.fan_hours);
-            if (hours > 12) insights.push({ icon: "💨", color: "text-orange-300", msg: `Fan Usage: ${numFans} fans running > 12 hrs.BLDC fans could save 60 % power.` });
-            else if (hours < 6) insights.push({ icon: "✅", color: "text-green-300", msg: "Fan Usage: Conservative usage helps keep base load low." });
+            if (hours > 12) insights.push({ icon: <Wind className="w-6 h-6 text-orange-500" />, color: "text-orange-300", msg: `Fan Usage: ${numFans} fans running > 12 hrs.BLDC fans could save 60 % power.` });
+            else if (hours < 6) insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Fan Usage: Conservative usage helps keep base load low." });
         }
 
         // 12. LED Lights
         const numLed = getNum(details.num_led);
-        if (numLed > 20) insights.push({ icon: "💡", color: "text-blue-200", msg: `High Light Count: You have ${numLed} LEDs.Ensure unoccupied rooms are dark.` });
+        if (numLed > 20) insights.push({ icon: <Lightbulb className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: `High Light Count: You have ${numLed} LEDs.Ensure unoccupied rooms are dark.` });
 
         // 13. CFL / Tube Lights (Legacy)
         const numCfl = appliances.includes('cfl_bulb') ? getNum(details.num_cfl) : 0;
         const numTube = appliances.includes('tube_light') ? getNum(details.num_tube) : 0;
         if (numCfl > 0 || numTube > 0) {
-            insights.push({ icon: "🚫", color: "text-red-300", msg: `Legacy Lighting: ${numCfl} CFLs / ${numTube} Tubes detected.Replace with LEDs immediately to save 50 %.` });
+            insights.push({ icon: <Ban className="w-6 h-6 text-red-500" />, color: "text-red-300", msg: `Legacy Lighting: ${numCfl} CFLs / ${numTube} Tubes detected.Replace with LEDs immediately to save 50 %.` });
         } else {
-            insights.push({ icon: "✨", color: "text-green-300", msg: "100% LED: Excellent! No inefficient lighting detected in your home." });
+            insights.push({ icon: <Sparkles className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "100% LED: Excellent! No inefficient lighting detected in your home." });
         }
 
         // 14. Television
         if (appliances.includes('tv')) {
             const hours = getNum(details.tv_hours);
-            if (hours > 6) insights.push({ icon: "📺", color: "text-yellow-300", msg: "High TV Time: >6 hrs/day. Lower the brightness/backlight to save panel energy." });
-            else if (hours < 2) insights.push({ icon: "✅", color: "text-green-300", msg: "Low TV Usage: Great for energy bills and productivity." });
+            if (hours > 6) insights.push({ icon: <Tv className="w-6 h-6 text-yellow-500" />, color: "text-yellow-300", msg: "High TV Time: >6 hrs/day. Lower the brightness/backlight to save panel energy." });
+            else if (hours < 2) insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Low TV Usage: Great for energy bills and productivity." });
         }
 
         // 15. Desktop
         if (appliances.includes('desktop')) {
             const hours = getNum(details.desktop_hours);
-            if (hours > 8) insights.push({ icon: "🖥️", color: "text-yellow-300", msg: "Desktop Workstation: Running long hours? Ensure 'Sleep' settings are active after 10 mins." });
+            if (hours > 8) insights.push({ icon: <Monitor className="w-6 h-6 text-yellow-500" />, color: "text-yellow-300", msg: "Desktop Workstation: Running long hours? Ensure 'Sleep' settings are active after 10 mins." });
         }
 
         // 16. Laptop
         if (appliances.includes('laptop')) {
             const hours = getNum(details.laptop_hours);
-            if (hours > 12) insights.push({ icon: "💻", color: "text-blue-200", msg: "Laptop: Always plugged in? Modern batteries manage charge, but it still draws power." });
+            if (hours > 12) insights.push({ icon: <Laptop className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Laptop: Always plugged in? Modern batteries manage charge, but it still draws power." });
         }
 
         // 17. Water Pump
         if (appliances.includes('pump') || appliances.includes('water_pump')) {
             const hours = getNum(details.pump_hours);
-            if (hours > 1.5) insights.push({ icon: "🚰", color: "text-red-300", msg: "Pump Alert: > 1.5 hrs/day is high. Check for leaks or float-valve failure." });
-            else if (hours < 0.5) insights.push({ icon: "✅", color: "text-green-300", msg: "Pump Optimized: Your water usage system is very efficient." });
+            if (hours > 1.5) insights.push({ icon: <Droplet className="w-6 h-6 text-red-500" />, color: "text-red-300", msg: "Pump Alert: > 1.5 hrs/day is high. Check for leaks or float-valve failure." });
+            else if (hours < 0.5) insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Pump Optimized: Your water usage system is very efficient." });
         }
 
         // 18. Iron Box
         if (appliances.includes('iron')) {
             const hours = getNum(details.iron_hours);
-            if (hours > 0.5) insights.push({ icon: "👔", color: "text-orange-300", msg: "Ironing: Daily heating wastes energy. Iron all clothes in one weekly batch." });
+            if (hours > 0.5) insights.push({ icon: <Shirt className="w-6 h-6 text-orange-500" />, color: "text-orange-300", msg: "Ironing: Daily heating wastes energy. Iron all clothes in one weekly batch." });
         }
 
         // 19. Hair Dryer
         if (appliances.includes('hair_dryer')) {
             const hours = getNum(details.hair_dryer_hours);
-            if (hours > 0.5) insights.push({ icon: "💇", color: "text-yellow-200", msg: "Hair Dryer: High heat device. 30 mins is equivalent to running 100 LEDs." });
+            if (hours > 0.5) insights.push({ icon: <Wind className="w-6 h-6 text-yellow-500" />, color: "text-yellow-200", msg: "Hair Dryer: High heat device. 30 mins is equivalent to running 100 LEDs." });
         }
 
         // 20. Vacuum Cleaner
         if (appliances.includes('vacuum')) {
             const hours = getNum(details.vacuum_hours);
-            if (hours > 0.4) insights.push({ icon: "🧹", color: "text-blue-200", msg: "Vacuuming: Frequent heavy motor usage. Check bag/filter to shorten cleaning time." });
+            if (hours > 0.4) insights.push({ icon: <Wind className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Vacuuming: Frequent heavy motor usage. Check bag/filter to shorten cleaning time." });
         }
 
         // 21. Mixer
         if (appliances.includes('mixer')) {
             const hours = getNum(details.mixer_hours);
-            if (hours > 0.5) insights.push({ icon: "🥣", color: "text-blue-200", msg: "Mixer/Grinder: Heavy preparation detected. Ensure lids are tight to avoid re-grinding." });
+            if (hours > 0.5) insights.push({ icon: <Utensils className="w-6 h-6 text-blue-400" />, color: "text-blue-200", msg: "Mixer/Grinder: Heavy preparation detected. Ensure lids are tight to avoid re-grinding." });
         }
 
         // Fallback
         if (insights.length === 0) {
-            insights.push({ icon: "✅", color: "text-green-300", msg: "Efficiency Pro: Your energy habits are exemplary. Low consumption profile." });
+            insights.push({ icon: <CheckCircle className="w-6 h-6 text-green-500" />, color: "text-green-300", msg: "Efficiency Pro: Your energy habits are exemplary. Low consumption profile." });
         }
 
         // Priority Sort: Red > Orange > Yellow > Blue > Green
@@ -1002,7 +1002,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 {/* Header Bar */}
                 <div className="bg-[#1e293b]/50 px-6 py-3 border-b border-[#334155] flex justify-between items-center backdrop-blur-sm" >
                     <div className="flex items-center gap-2">
-                        <span className="text-xl">📊</span>
+                        <BarChart3 className="w-6 h-6 text-blue-400" />
                         <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">Visual Analysis</span>
                     </div>
                 </div>
@@ -1086,7 +1086,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 {/* Header Bar */}
                 <div className="bg-[#1e293b]/50 px-6 py-3 border-b border-[#334155] flex justify-between items-center backdrop-blur-sm" >
                     <div className="flex items-center gap-2">
-                        <span className="text-xl">📋</span>
+                        <ClipboardList className="w-6 h-6 text-blue-400" />
                         <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">Appliance Consumption Detail</span>
                     </div>
                     <span className="text-xs text-slate-500">Sorted by Usage</span>
@@ -1143,7 +1143,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 {/* Header Bar */}
                 <div className="bg-[#1e293b]/50 px-6 py-3 border-b border-[#334155] flex justify-between items-center backdrop-blur-sm" >
                     <div className="flex items-center gap-2">
-                        <span className="text-xl">🧠</span>
+                        <Brain className="w-6 h-6 text-blue-400" />
                         <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">Smart Energy Diagnostics</span>
                     </div>
                     <span className="text-xs text-slate-500">AI-Powered Insights</span>
@@ -1183,7 +1183,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 {/* Header Bar */}
                 <div className="bg-[#1e293b]/50 px-6 py-3 border-b border-[#334155] flex justify-between items-center backdrop-blur-sm" >
                     <div className="flex items-center gap-2">
-                        <span className="text-xl">✨</span>
+                        <Sparkles className="w-6 h-6 text-green-400" />
                         <span className="text-xs font-medium text-green-400 uppercase tracking-widest">What-If Optimization</span>
                     </div>
                     <span className="text-xs text-slate-500">AI Savings Engine</span>
@@ -1200,7 +1200,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                                 onClick={simulateOptimization}
                                 className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-8 py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 mx-auto text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 border border-blue-500/50 uppercase tracking-wide"
                             >
-                                <span className="text-lg">✨</span> Run AI Optimization
+                                <Sparkles className="w-5 h-5" /> Run AI Optimization
                             </button>
                         </div>
                     ) : (
