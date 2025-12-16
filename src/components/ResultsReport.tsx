@@ -1,9 +1,10 @@
+'use client';
 import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { predictAppliance, calculateBill, simulateSavings } from '@/lib/api';
 import { saveTraining } from '@/lib/saveTraining';
 import { getNum, parseFloatVal, parseStar, getPhysicsRatio, getExactModeWatts, PHYSICS_DEFAULTS, distributeEnergyGap } from '@/lib/energyUtils';
-import { Download, ChevronRight, HelpCircle, Zap, Trophy, Sun, CheckCircle, CloudRain, Droplets, AlertTriangle, AppWindow, Snowflake, AlertOctagon, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb, Ban, Sparkles, Tv, Monitor, Laptop, Droplet, Scissors, BarChart3, ClipboardList, Brain, Search, Trash2 } from 'lucide-react';
+import { Check, Download, ChevronRight, HelpCircle, Zap, Trophy, Sun, CheckCircle, CloudRain, Droplets, AlertTriangle, AppWindow, Snowflake, AlertOctagon, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb, Ban, Sparkles, Tv, Monitor, Laptop, Droplet, Scissors, BarChart3, ClipboardList, Brain, Search, Trash2, Refrigerator, WashingMachine, Microwave, AirVent, CookingPot, Sandwich, ShowerHead, Disc } from 'lucide-react';
 import { toast } from 'sonner';
 import SolarCard from './SolarCard';
 import TariffVisualizer from './TariffVisualizer';
@@ -1105,26 +1106,56 @@ export default function ResultsReport({ household, appliances, details, onRestar
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-700/30">
-                                {sortedBreakdown.map((item: any, idx: number) => (
-                                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors group">
-                                        <td className="py-4 px-6 text-slate-200 font-medium group-hover:text-blue-300 transition-colors">
-                                            {item.id === 'system_overhead' ? (
-                                                <div className="flex items-center gap-1.5 cursor-help" title="Overhead reduces as input accuracy improves. Includes wiring loss, inverters, and standby power.">
-                                                    <span>{item.name}</span>
-                                                    <HelpCircle className="w-3.5 h-3.5 text-slate-500 hover:text-blue-400" />
+                                {sortedBreakdown.map((item: any, idx: number) => {
+                                    const getApplianceIcon = (id: string) => {
+                                        if (id.includes('ac') || id.includes('air_conditioner')) return <AirVent className="w-4 h-4" />;
+                                        if (id.includes('fridge') || id.includes('refrigerator')) return <Refrigerator className="w-4 h-4" />;
+                                        if (id.includes('washing')) return <WashingMachine className="w-4 h-4" />;
+                                        if (id.includes('geyser') || id.includes('heater') || id.includes('water_heater')) return <ShowerHead className="w-4 h-4" />;
+                                        if (id.includes('microwave') || id.includes('oven')) return <Microwave className="w-4 h-4" />;
+                                        if (id.includes('kettle')) return <Coffee className="w-4 h-4" />;
+                                        if (id.includes('induction') || id.includes('cooker')) return <Zap className="w-4 h-4" />;
+                                        if (id.includes('rice')) return <CookingPot className="w-4 h-4" />;
+                                        if (id.includes('toaster')) return <Sandwich className="w-4 h-4" />;
+                                        if (id.includes('mixer')) return <Disc className="w-4 h-4" />;
+                                        if (id.includes('fan')) return <Wind className="w-4 h-4" />;
+                                        if (id.includes('light') || id.includes('led') || id.includes('bulb')) return <Lightbulb className="w-4 h-4" />;
+                                        if (id.includes('tv') || id.includes('television')) return <Tv className="w-4 h-4" />;
+                                        if (id.includes('desktop') || id.includes('monitor')) return <Monitor className="w-4 h-4" />;
+                                        if (id.includes('laptop')) return <Laptop className="w-4 h-4" />;
+                                        if (id.includes('pump') || id.includes('water')) return <Droplet className="w-4 h-4" />;
+                                        if (id.includes('iron')) return <Shirt className="w-4 h-4" />;
+                                        if (id.includes('hair') || id.includes('vacuum')) return <Wind className="w-4 h-4" />;
+                                        if (id === 'system_overhead') return <Zap className="w-4 h-4 text-amber-400" />;
+                                        return <Zap className="w-4 h-4" />; // Default
+                                    };
+
+                                    return (
+                                        <tr key={idx} className="hover:bg-slate-800/30 transition-colors group">
+                                            <td className="py-4 px-6 text-slate-200 font-medium group-hover:text-blue-300 transition-colors">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="p-2 bg-slate-800 rounded-lg text-slate-400 group-hover:text-blue-400 group-hover:bg-blue-500/10 transition-colors">
+                                                        {getApplianceIcon(item.id)}
+                                                    </div>
+                                                    {item.id === 'system_overhead' ? (
+                                                        <div className="flex items-center gap-1.5 cursor-help" title="Overhead includes wiring loss, inverters, and standby power.">
+                                                            <span>{item.name}</span>
+                                                            <HelpCircle className="w-3.5 h-3.5 text-slate-500 hover:text-blue-400" />
+                                                        </div>
+                                                    ) : (
+                                                        item.name
+                                                    )}
                                                 </div>
-                                            ) : (
-                                                item.name
-                                            )}
-                                        </td>
-                                        <td className="text-right py-4 px-6 text-slate-200 font-mono">{item.kwh.toFixed(2)}</td>
-                                        <td className="text-right py-4 px-6 text-slate-500 text-xs">
-                                            {`±${item.uncertainty.toFixed(2)} `}
-                                        </td>
-                                        <td className="text-right py-4 px-6 text-slate-200 font-mono">{item.percentage.toFixed(1)}%</td>
-                                        <td className="text-right py-4 px-6 text-slate-200 font-mono font-bold">₹{item.cost}</td>
-                                    </tr>
-                                ))}
+                                            </td>
+                                            <td className="text-right py-4 px-6 text-slate-200 font-mono">{item.kwh.toFixed(2)}</td>
+                                            <td className="text-right py-4 px-6 text-slate-500 text-xs">
+                                                {`±${item.uncertainty.toFixed(2)} `}
+                                            </td>
+                                            <td className="text-right py-4 px-6 text-slate-200 font-mono">{item.percentage.toFixed(1)}%</td>
+                                            <td className="text-right py-4 px-6 text-slate-200 font-mono font-bold">₹{item.cost}</td>
+                                        </tr>
+                                    );
+                                })}
                                 <tr className="bg-slate-800/50 border-t border-slate-600/50">
                                     <td className="py-4 px-6 text-white font-bold uppercase tracking-wider text-xs">TOTAL</td>
                                     <td className="text-right py-4 px-6 text-white font-bold font-mono">{household.kwh.toFixed(1)}</td>
@@ -1238,7 +1269,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                                 <div className="flex flex-wrap gap-3 justify-center">
                                     {optimization.breakdown.map((item: string, idx: number) => (
                                         <div key={idx} className="flex items-center gap-2 bg-slate-800/50 text-slate-300 px-4 py-2 rounded-lg border border-slate-700 hover:border-green-500/50 hover:bg-slate-800 transition-colors text-xs shadow-sm">
-                                            <span className="text-green-400">✓</span> {item}
+                                            <Check className="w-3.5 h-3.5 text-green-400" /> {item}
                                         </div>
                                     ))}
                                 </div>

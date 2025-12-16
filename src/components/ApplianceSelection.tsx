@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { saveTraining } from '@/lib/saveTraining';
-import { Check } from 'lucide-react';
+import {
+    Check, Snowflake, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb,
+    Tv, Monitor, Laptop, Droplet, Zap, Refrigerator, WashingMachine,
+    Microwave, AirVent, CookingPot, Heater, Disc, Sandwich, ShowerHead
+} from 'lucide-react';
 
 
 interface Props {
@@ -58,34 +62,34 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
         {
             title: "Major Appliances",
             items: [
-                { id: 'air_conditioner', label: 'Air Conditioner (AC)' },
-                { id: 'refrigerator', label: 'Refrigerator / Fridge' },
-                { id: 'washing_machine', label: 'Washing Machine' },
-                { id: 'geyser', label: 'Water Heater / Geyser' },
-                { id: 'microwave', label: 'Microwave Oven' },
-                { id: 'kettle', label: 'Electric Kettle' },
-                { id: 'induction', label: 'Induction Cooktop' },
+                { id: 'air_conditioner', label: 'Air Conditioner (AC)', icon: <AirVent className="w-5 h-5 text-cyan-400" /> },
+                { id: 'refrigerator', label: 'Refrigerator / Fridge', icon: <Refrigerator className="w-5 h-5 text-blue-400" /> },
+                { id: 'washing_machine', label: 'Washing Machine', icon: <WashingMachine className="w-5 h-5 text-indigo-400" /> },
+                { id: 'geyser', label: 'Water Heater / Geyser', icon: <ShowerHead className="w-5 h-5 text-red-400" /> },
+                { id: 'microwave', label: 'Microwave Oven', icon: <Microwave className="w-5 h-5 text-orange-400" /> },
+                { id: 'kettle', label: 'Electric Kettle', icon: <Coffee className="w-5 h-5 text-amber-600" /> },
+                { id: 'induction', label: 'Induction Cooktop', icon: <Zap className="w-5 h-5 text-red-500" /> },
             ]
         },
         {
             title: "Kitchen Appliances",
             items: [
-                { id: 'mixer', label: 'Mixer / Grinder' },
-                { id: 'rice_cooker', label: 'Rice Cooker' },
-                { id: 'toaster', label: 'Toaster' },
-                { id: 'food_processor', label: 'Food Processor' },
+                { id: 'mixer', label: 'Mixer / Grinder', icon: <Disc className="w-5 h-5 text-slate-400" /> },
+                { id: 'rice_cooker', label: 'Rice Cooker', icon: <CookingPot className="w-5 h-5 text-white" /> },
+                { id: 'toaster', label: 'Toaster', icon: <Sandwich className="w-5 h-5 text-orange-300" /> },
+                { id: 'food_processor', label: 'Food Processor', icon: <Utensils className="w-5 h-5 text-gray-400" /> },
             ]
         },
         {
             title: "Other Appliances",
             items: [
-                { id: 'tv', label: 'Television' },
-                { id: 'desktop', label: 'Desktop Computer' },
-                { id: 'laptop', label: 'Laptop' },
-                { id: 'pump', label: 'Water Pump / Motor' },
-                { id: 'iron', label: 'Iron' },
-                { id: 'hair_dryer', label: 'Hair Dryer' },
-                { id: 'vacuum', label: 'Vacuum Cleaner' },
+                { id: 'tv', label: 'Television', icon: <Tv className="w-5 h-5 text-emerald-400" /> },
+                { id: 'desktop', label: 'Desktop Computer', icon: <Monitor className="w-5 h-5 text-blue-500" /> },
+                { id: 'laptop', label: 'Laptop', icon: <Laptop className="w-5 h-5 text-sky-400" /> },
+                { id: 'pump', label: 'Water Pump / Motor', icon: <Droplet className="w-5 h-5 text-blue-600" /> },
+                { id: 'iron', label: 'Iron', icon: <Shirt className="w-5 h-5 text-yellow-500" /> },
+                { id: 'hair_dryer', label: 'Hair Dryer', icon: <Wind className="w-5 h-5 text-pink-400" /> },
+                { id: 'vacuum', label: 'Vacuum Cleaner', icon: <Wind className="w-5 h-5 text-teal-400" /> },
             ]
         }
     ];
@@ -126,15 +130,16 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                             {cat.items.map((item) => (
                                 <div
                                     key={item.id}
-                                    className={`flex items-center space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:shadow-lg ${selected.includes(item.id) ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700 hover:bg-slate-800'}`}
+                                    className={`flex items-center space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:shadow-lg group ${selected.includes(item.id) ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700 hover:bg-slate-800'}`}
                                     onClick={() => toggleAppliance(item.id)}
                                 >
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes(item.id) ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                        {selected.includes(item.id) && <Check className="w-3.5 h-3.5 text-white" />}
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${selected.includes(item.id) ? 'bg-blue-600/20 text-blue-400' : 'bg-slate-800 text-slate-500 group-hover:bg-slate-700 group-hover:text-slate-300'}`}>
+                                        {item.icon}
                                     </div>
-                                    <span className="text-[#e2e8f0] flex-1 select-none">
+                                    <span className="text-[#e2e8f0] flex-1 select-none font-medium">
                                         {item.label}
                                     </span>
+                                    {selected.includes(item.id) && <Check className="w-5 h-5 text-blue-500" />}
                                 </div>
                             ))}
                         </div>

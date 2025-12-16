@@ -1,7 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { saveTraining } from '@/lib/saveTraining';
 import { normalizePattern } from '@/lib/normalizePattern';
-import { ChevronRight, AlertTriangle, AlertCircle, Info } from 'lucide-react';
+import {
+    ChevronRight, AlertTriangle, AlertCircle, Info,
+    Snowflake, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb,
+    Tv, Monitor, Laptop, Droplet, Zap, Refrigerator, WashingMachine,
+    Microwave, AirVent, CookingPot, Heater, Disc, Sandwich, ShowerHead
+} from 'lucide-react';
 
 interface Props {
     selected: string[];
@@ -27,7 +32,7 @@ interface SelectOption {
 }
 
 interface ApplianceCardProps {
-    emoji: string;
+    icon: ReactNode;
     title: string;
     fields?: Array<{
         label: string;
@@ -49,7 +54,7 @@ interface ApplianceCardProps {
 }
 
 function ApplianceDetailCard({
-    emoji,
+    icon,
     title,
     fields,
     usagePatterns,
@@ -78,7 +83,10 @@ function ApplianceDetailCard({
 
     return (
         <div className="p-6 bg-[#1a202c] border border-[#4a5568] rounded-xl mb-6 shadow-sm">
-            <h4 className="text-lg font-medium text-[#e2e8f0] mb-4 flex items-center gap-2">
+            <h4 className="text-lg font-medium text-[#e2e8f0] mb-4 flex items-center gap-3">
+                <span className="p-2 bg-slate-800 rounded-lg text-blue-400 border border-slate-700">
+                    {icon}
+                </span>
                 <span>{title}</span>
             </h4>
 
@@ -405,7 +413,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="refrigerator"
-                        emoji=""
+                        icon={<Refrigerator className="w-5 h-5 text-blue-400" />}
                         title="Refrigerator"
                         fields={[
                             { label: "Star rating", key: "fridge_star", options: [{ value: "unknown", label: "Don't Know" }, { value: "3-star", label: "3-star" }, { value: "4-star", label: "4-star" }, { value: "5-star", label: "5-star" }] },
@@ -434,7 +442,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="ac"
-                        emoji=""
+                        icon={<AirVent className="w-5 h-5 text-cyan-400" />}
                         title="Air Conditioner"
                         fields={[
                             { label: "Star rating", key: "ac_star", options: [{ value: "unknown", label: "Don't Know" }, { value: "3-star", label: "3-star" }, { value: "4-star", label: "4-star" }, { value: "5-star", label: "5-star" }] },
@@ -463,7 +471,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="wm"
-                        emoji=""
+                        icon={<WashingMachine className="w-5 h-5 text-indigo-400" />}
                         title="Washing Machine"
                         fields={[
                             { label: "Type", key: "wm_type", options: [{ value: "unknown", label: "Don't Know" }, { value: "semi_automatic", label: "Semi-Automatic" }, { value: "top_load", label: "Top Load (Fully Automatic)" }, { value: "front_load", label: "Front Load (Fully Automatic)" }] },
@@ -492,7 +500,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="geyser"
-                        emoji=""
+                        icon={<ShowerHead className="w-5 h-5 text-red-500" />}
                         title="Water Heater / Geyser"
                         fields={[
                             { label: "Type", key: "geyser_type", options: [{ value: "unknown", label: "Don't Know" }, { value: "instant", label: "Instant (3kW+)" }, { value: "storage", label: "Storage (2kW)" }, { value: "gas", label: "Gas Geyser" }] },
@@ -522,7 +530,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="mixer"
-                        emoji=""
+                        icon={<Disc className="w-5 h-5 text-slate-400" />}
                         title="Mixer / Grinder"
                         usagePatterns={mixerPatterns}
                         selectedPattern={details.mixer_pattern || "light"}
@@ -546,7 +554,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="microwave"
-                        emoji=""
+                        icon={<Microwave className="w-5 h-5 text-orange-400" />}
                         title="Microwave Oven"
                         usagePatterns={microwavePatterns}
                         selectedPattern={details.microwave_pattern || "light"}
@@ -570,7 +578,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="kettle"
-                        emoji=""
+                        icon={<Coffee className="w-5 h-5 text-amber-600" />}
                         title="Electric Kettle"
                         usagePatterns={kettlePatterns}
                         selectedPattern={details.kettle_pattern || "light"}
@@ -594,7 +602,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="induction"
-                        emoji=""
+                        icon={<Zap className="w-5 h-5 text-red-500" />}
                         title="Induction Cooktop"
                         usagePatterns={inductionPatterns}
                         selectedPattern={details.induction_pattern || "moderate"}
@@ -618,7 +626,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="rice_cooker"
-                        emoji=""
+                        icon={<CookingPot className="w-5 h-5 text-white" />}
                         title="Rice Cooker"
                         usagePatterns={ricePatterns}
                         selectedPattern={details.rice_cooker_pattern || "light"}
@@ -642,7 +650,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="toaster"
-                        emoji=""
+                        icon={<Sandwich className="w-5 h-5 text-orange-300" />}
                         title="Toaster"
                         usagePatterns={toasterPatterns}
                         selectedPattern={details.toaster_pattern || "light"}
@@ -666,7 +674,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="food_processor"
-                        emoji=""
+                        icon={<Utensils className="w-5 h-5 text-gray-400" />}
                         title="Food Processor"
                         usagePatterns={fpPatterns}
                         selectedPattern={details.food_processor_pattern || "light"}
@@ -692,7 +700,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="fans"
-                        emoji=""
+                        icon={<Wind className="w-5 h-5 text-cyan-200" />}
                         title={`Ceiling Fans`}
                         fields={[
                             { label: "Fan Type", key: "fan_type", options: [{ value: "unknown", label: "Don't Know" }, { value: "standard", label: "Standard (Old, ~75W)" }, { value: "bldc", label: "BLDC (Energy Saver, ~30W)" }] }
@@ -718,7 +726,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="led"
-                        emoji=""
+                        icon={<Lightbulb className="w-5 h-5 text-yellow-400" />}
                         title={`LED Lights`}
                         usagePatterns={ledPatterns}
                         selectedPattern={details.led_pattern || "evening"}
@@ -742,7 +750,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="cfl"
-                        emoji=""
+                        icon={<Lightbulb className="w-5 h-5 text-white" />}
                         title={`CFL Lights`}
                         usagePatterns={cflPatterns}
                         selectedPattern={details.cfl_pattern || "evening"}
@@ -766,7 +774,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="tube"
-                        emoji=""
+                        icon={<Lightbulb className="w-5 h-5 text-blue-100" />}
                         title={`Tube Lights`}
                         usagePatterns={tubePatterns}
                         selectedPattern={details.tube_pattern || "evening"}
@@ -792,7 +800,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="tv"
-                        emoji=""
+                        icon={<Tv className="w-5 h-5 text-emerald-400" />}
                         title="Television"
                         fields={[
                             { label: "Screen Type", key: "tv_type", options: [{ value: "unknown", label: "Don't Know" }, { value: "LED", label: "LED / LCD (Standard)" }, { value: "CRT", label: "Old Box TV (CRT)" }, { value: "OLED", label: "OLED / QLED (Premium)" }] },
@@ -819,7 +827,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="desktop"
-                        emoji=""
+                        icon={<Monitor className="w-5 h-5 text-blue-500" />}
                         title="Desktop Computer"
                         usagePatterns={desktopPatterns}
                         selectedPattern={details.desktop_pattern || "moderate"}
@@ -840,7 +848,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="laptop"
-                        emoji=""
+                        icon={<Laptop className="w-5 h-5 text-sky-400" />}
                         title="Laptop"
                         usagePatterns={laptopPatterns}
                         selectedPattern={details.laptop_pattern || "moderate"}
@@ -864,7 +872,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="pump"
-                        emoji=""
+                        icon={<Droplet className="w-5 h-5 text-blue-600" />}
                         title="Water Pump"
                         fields={[
                             { label: "Motor Power (HP)", key: "pump_hp", options: [{ value: "unknown", label: "Don't Know" }, { value: "0.5", label: "0.5 HP (Small)" }, { value: "1.0", label: "1.0 HP (Medium)" }, { value: "1.5", label: "1.5 HP (Large)" }, { value: "2.0", label: "2.0 HP+ (Heavy)" }] }
@@ -890,7 +898,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="iron"
-                        emoji=""
+                        icon={<Shirt className="w-5 h-5 text-yellow-500" />}
                         title="Iron Box"
                         usagePatterns={ironPatterns}
                         selectedPattern={details.iron_pattern || "rarely"}
@@ -914,7 +922,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="hair_dryer"
-                        emoji=""
+                        icon={<Wind className="w-5 h-5 text-pink-400" />}
                         title="Hair Dryer"
                         usagePatterns={hairDryerPatterns}
                         selectedPattern={details.hair_dryer_pattern || "light"}
@@ -938,7 +946,7 @@ export default function UsageDetails({ selected, details, onUpdate, onNext, onBa
                 return (
                     <ApplianceDetailCard
                         key="vacuum"
-                        emoji=""
+                        icon={<Wind className="w-5 h-5 text-teal-400" />}
                         title="Vacuum Cleaner"
                         usagePatterns={vacuumPatterns}
                         selectedPattern={details.vacuum_pattern || "light"}
