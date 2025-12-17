@@ -702,16 +702,23 @@ export default function ResultsReport({ household, appliances, details, onRestar
                     mode: details.mode || 'Standard'
                 };
 
+                // VALIDATION: Don't save if bill is 0 but usage is > 5 (removes error states)
+                const isValidEntry = newEntry.bill > 0 || newEntry.kwh < 5;
+
                 const currentHistory = details.history || [];
                 const lastEntry = currentHistory.length > 0 ? currentHistory[currentHistory.length - 1] : null;
 
-                // Check for duplicates (ignore date)
+                // Check for duplicates (inputs + output)
                 const isDuplicate = lastEntry &&
                     lastEntry.kwh === newEntry.kwh &&
                     lastEntry.bill === newEntry.bill &&
                     lastEntry.mode === newEntry.mode;
 
-                const updatedHistory = isDuplicate ? currentHistory : [...currentHistory, newEntry];
+                // Only append if valid and unique
+                let updatedHistory = currentHistory;
+                if (isValidEntry && !isDuplicate) {
+                    updatedHistory = [...currentHistory, newEntry];
+                }
 
                 // Save results to Supabase (Current + History)
                 saveTraining(trainingId, {
