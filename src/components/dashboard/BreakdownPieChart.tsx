@@ -43,7 +43,7 @@ export default function BreakdownPieChart({ breakdown }: Props) {
                     <Tooltip
                         contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px' }}
                         itemStyle={{ color: '#e2e8f0' }}
-                        formatter={(value: number) => [`${value.toFixed(1)} kWh`, 'Usage']}
+                        formatter={(value: any) => [`${Number(value).toFixed(1)} kWh`, 'Usage']}
                     />
                     <Legend
                         layout="vertical"
