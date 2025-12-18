@@ -1,4 +1,4 @@
-# SmartWatt V2.1 - Frontend ⚡
+# SmartWatt AI - Frontend ⚡
 
 **Physics-Informed Integrated Hybrid AI Architecture for Energy Estimation.**
 
