@@ -5,11 +5,25 @@ interface Props {
 }
 
 export default function UsageChart({ history }: Props) {
-    // Deduplicate history
-    const uniqueHistory = history.filter((entry, index) => {
-        if (index === 0) return true;
-        const prev = history[index - 1];
-        return !(entry.kwh === prev.kwh && entry.bill === prev.bill && entry.mode === prev.mode);
+    // Deduplicate history using robust Set-based logic
+    const seen = new Set();
+    const uniqueHistory = history.filter((entry) => {
+        // 1. Sanity Check: Hide "Zero Bill" glitches (legacy data cleanup)
+        const bill = Number(entry.bill || 0);
+        const kwh = Number(entry.kwh || 0);
+
+        if (bill === 0 && kwh > 5) {
+            return false;
+        }
+
+        // 2. Deduplication: Create a unique key based on content
+        const key = `${entry.kwh}-${entry.bill}-${entry.mode}`;
+
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
     });
 
     if (uniqueHistory.length < 2) {
