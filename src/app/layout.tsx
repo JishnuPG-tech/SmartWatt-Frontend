@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -26,6 +27,7 @@ export default function RootLayout({
         <div className="app-wrapper">
           {children}
           <Toaster position="top-center" richColors theme="dark" />
+          <SpeedInsights />
         </div>
       </body>
     </html>
