@@ -8,19 +8,29 @@ interface Props {
 }
 
 export default function HistoryTable({ history, onSelect, selectedId }: Props) {
-    // The "Anti-Clutter" Filter
-    // Sometimes users click "Save" multiple times in a row.
-    // We don't want 5 identical copies of the same report.
-    // So, we check: Is this entry EXACTLY the same as the last one?
-    // If yes, we skip it. Keeps the history clean!
-    const uniqueHistory = history.filter((entry, index) => {
-        if (index === 0) return true;
-        const prev = history[index - 1];
-        const isDuplicate =
-            entry.kwh === prev.kwh &&
-            entry.bill === prev.bill &&
-            entry.mode === prev.mode;
-        return !isDuplicate;
+    // The "Anti-Clutter" Filter (Robust Version)
+    // We use a Set to track seen entries and filter out ANY duplicates.
+    // We ALSO filter out "Glitch" entries (Bill=0 but Usage>5) that might have been saved previously.
+    const seen = new Set();
+    const uniqueHistory = history.filter((entry) => {
+        // 1. Sanity Check: Hide "Zero Bill" glitches (legacy data cleanup)
+        // If usage is significant (>5 units) but bill is 0, it's an error state. Hide it.
+        // Also handle cases where bill might be undefined or null
+        const bill = Number(entry.bill || 0);
+        const kwh = Number(entry.kwh || 0);
+
+        if (bill === 0 && kwh > 5) {
+            return false;
+        }
+
+        // 2. Deduplication: Create a unique key based on content
+        const key = `${entry.kwh}-${entry.bill}-${entry.mode}`;
+
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
     });
 
     // Sort by date desc
