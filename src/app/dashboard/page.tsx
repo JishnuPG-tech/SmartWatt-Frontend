@@ -2,16 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabaseClient';
 import { loadTraining } from '@/lib/loadTraining';
 import LatestAssessmentDetail from '@/components/dashboard/LatestAssessmentDetail';
 import HistoryTable from '@/components/dashboard/HistoryTable';
-import UsageChart from '@/components/dashboard/UsageChart';
-import ApplianceBarChart from '@/components/dashboard/ApplianceBarChart';
 import { LogOut, LayoutDashboard } from 'lucide-react';
 import SystemActiveHeader from '@/components/SystemActiveHeader';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { toast } from 'sonner';
+
+// Lazy Load Charts to improve LCP
+const UsageChart = dynamic(() => import('@/components/dashboard/UsageChart'), {
+    ssr: false,
+    loading: () => <Skeleton className="h-[350px] w-full rounded-2xl bg-slate-800/50" />
+});
+
+const ApplianceBarChart = dynamic(() => import('@/components/dashboard/ApplianceBarChart'), {
+    ssr: false,
+    loading: () => <Skeleton className="h-[350px] w-full rounded-2xl bg-slate-800/50" />
+});
 
 export default function Dashboard() {
     const router = useRouter();
