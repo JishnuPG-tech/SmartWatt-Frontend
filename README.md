@@ -60,7 +60,7 @@ This project is optimized for deployment on **Vercel**.
 3.  Set the `NEXT_PUBLIC_BACKEND_URL` environment variable to your backend URL (e.g., your Render hosted API).
 4.  Click **Deploy**.
 
-## 📄 License
+## 📄 License 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
