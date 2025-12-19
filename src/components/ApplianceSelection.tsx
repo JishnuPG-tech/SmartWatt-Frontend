@@ -281,7 +281,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                     ← Back
                 </button>
                 <button onClick={onNext} className="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-700 to-blue-600 text-white hover:from-blue-600 hover:to-blue-500 transition-all shadow-lg shadow-blue-900/20">
-                    Next: Usage Details →
+                    {mode === 'quick' ? 'Calculate Results →' : 'Next: Usage Details →'}
                 </button>
             </div>
         </div>

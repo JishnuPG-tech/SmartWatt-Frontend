@@ -141,7 +141,7 @@ export default function VerificationDashboard({ onClose }: { onClose: () => void
 
                 <div className="p-4 bg-slate-950/50 border-t border-slate-800 text-center">
                     <p className="text-xs text-slate-500">
-                        Tests verified against shared logic engine (v2.0) • {new Date().toLocaleTimeString()}
+                        Tests verified against shared logic engine (SmartWatt AI) • {new Date().toLocaleTimeString()}
                     </p>
                 </div>
             </div>

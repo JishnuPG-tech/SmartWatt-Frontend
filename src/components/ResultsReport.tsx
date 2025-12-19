@@ -637,7 +637,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 const finalConfidence = totalWeight > 0 ? (totalScore / totalWeight) : 98.2;
                 const roundedConfidence = Math.min(99.9, Math.max(60.0, finalConfidence));
 
-                // 3. Absolute Physics Logic (V2) - No Forced Scaling
+                // 3. Absolute Physics Logic () - No Forced Scaling
                 // We trust the physics/AI accuracy. Mismatches are "Unaccounted" or "Anomalies".
                 const estimatedTotalCost = billRes.total;
 
@@ -646,7 +646,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
 
                 Object.entries(predictions).forEach(([name, kwh]) => {
                     if (kwh > 0.01) {
-                        // V2: Use absolute kWh directly
+                        // : Use absolute kWh directly
                         const percentage = (kwh / totalBillKwh) * 100;
                         const cost = Math.round((kwh / totalBillKwh) * estimatedTotalCost);
 
@@ -802,7 +802,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                         <div className="col-span-1 md:col-span-2 mb-4">
                             <div className="bg-red-950/30 border border-red-500/30 rounded-xl p-4">
                                 <h4 className="text-red-400 font-bold mb-3 flex items-center gap-2">
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                     AI Health Anomalies Detected
                                 </h4>
                                 <div className="grid gap-2">
