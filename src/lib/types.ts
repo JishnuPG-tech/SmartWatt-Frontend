@@ -2,6 +2,7 @@ export interface HouseholdData {
     num_people: number;
     season: number | string;
     house_type: string;
+    location_type?: string;
     bi_monthly_kwh?: number;
     kwh?: number;
     estimated_bill: number;
@@ -80,6 +81,7 @@ export interface TrainingPayload {
     num_people?: number;
     season?: string;
     house_type?: string;
+    location_type?: string;
     bi_monthly_kwh?: number;
     estimated_bill?: number;
 

@@ -24,8 +24,8 @@ async function verifyPersistence() {
 
     // Dynamic imports to avoid hoisting issues
     const { supabase } = await import('./supabaseClient');
-    const { saveTraining } = await import('./saveTraining');
-    const { loadTraining } = await import('./loadTraining');
+    const { saveTraining } = await import('./api/saveTraining');
+    const { loadTraining } = await import('./api/loadTraining');
 
     // console.log("🚀 Starting Persistence Verification...");
 

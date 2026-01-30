@@ -26,15 +26,16 @@ export function normalizePattern(text: string): NormalizedUsage {
         }
     }
     // 3. Handle "X-Y hours" or "X hours"
-    else if (text.match(/hours?\/day/i) || text.match(/hours?\)/i)) {
-        // Check for "X-Y" range
-        const rangeMatch = text.match(/(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*hours?/i);
+    // Matches: "hours/day", "hr/day", "hrs/night", "hours)", "hrs)"
+    else if (text.match(/(?:hours?|hrs?)(?:\/(?:day|night))?/i) || text.match(/(?:hours?|hrs?)\)/i)) {
+        // Check for "X-Y" range (supports hyphen and en-dash)
+        const rangeMatch = text.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)/i);
         if (rangeMatch) {
             min = parseFloat(rangeMatch[1]);
             max = parseFloat(rangeMatch[2]);
         } else {
             // Check for "X+" or single "X"
-            const singleMatch = text.match(/(\d+(?:\.\d+)?)\+?\s*hours?/i);
+            const singleMatch = text.match(/(\d+(?:\.\d+)?)\+?\s*(?:hours?|hrs?)/i);
             if (singleMatch) {
                 min = parseFloat(singleMatch[1]);
                 // If "+", assume practical max of 10 (unless min is higher)
@@ -50,13 +51,14 @@ export function normalizePattern(text: string): NormalizedUsage {
         }
     }
     // 4. Handle "X-Y min" or "X min" (Daily)
-    else if (text.match(/min\/day/i) || text.match(/min\)/i)) {
-        const rangeMatch = text.match(/(\d+)\s*-\s*(\d+)\s*min/i);
+    else if (text.match(/(?:min|minutes?)\/day/i) || text.match(/(?:min|minutes?)\)/i)) {
+        // Support hyphen and en-dash, "min" or "minutes"
+        const rangeMatch = text.match(/(\d+)\s*[-–]\s*(\d+)\s*(?:min|minutes?)/i);
         if (rangeMatch) {
             min = parseFloat(rangeMatch[1]) / 60;
             max = parseFloat(rangeMatch[2]) / 60;
         } else {
-            const singleMatch = text.match(/(\d+)\s*min/i);
+            const singleMatch = text.match(/(\d+)\s*(?:min|minutes?)/i);
             if (singleMatch) {
                 min = parseFloat(singleMatch[1]) / 60;
                 max = min;
@@ -64,7 +66,10 @@ export function normalizePattern(text: string): NormalizedUsage {
         }
     }
     // 5. Handle "Always on" or specific keywords if regex failed
-    if (text.toLowerCase().includes("always on") || text.toLowerCase().includes("24 hours")) {
+    if (text.includes("24x7")) {
+        min = 24;
+        max = 24;
+    } else if (text.toLowerCase().includes("always on") || text.toLowerCase().includes("24 hours")) {
         if (max === 0) { // Only if not already set
             min = 20;
             max = 24;

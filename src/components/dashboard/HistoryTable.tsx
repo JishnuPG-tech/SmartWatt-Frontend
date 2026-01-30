@@ -1,13 +1,14 @@
-import { Download } from 'lucide-react';
+import { Download, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
     history: any[];
     onSelect?: (entry: any) => void;
+    onDelete?: (entry: any) => void;
     selectedId?: string | number; // Use date or index if no ID
 }
 
-export default function HistoryTable({ history, onSelect, selectedId }: Props) {
+export default function HistoryTable({ history, onSelect, onDelete, selectedId }: Props) {
     // The "Anti-Clutter" Filter (Robust Version)
     // We use a Set to track seen entries and filter out ANY duplicates.
     // We ALSO filter out "Glitch" entries (Bill=0 but Usage>5) that might have been saved previously.
@@ -84,6 +85,7 @@ export default function HistoryTable({ history, onSelect, selectedId }: Props) {
                             <th className="p-4 font-medium">Mode</th>
                             <th className="p-4 font-medium text-right">Units (kWh)</th>
                             <th className="p-4 font-medium text-right">Bill (₹)</th>
+                            <th className="p-4 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700/50">
@@ -115,6 +117,22 @@ export default function HistoryTable({ history, onSelect, selectedId }: Props) {
                                     </td>
                                     <td className="p-4 text-right font-mono">{Math.round(entry.kwh)}</td>
                                     <td className={`p-4 text-right font-mono font-medium ${isSelected ? 'text-green-300' : 'text-green-400'}`}>₹{Math.round(entry.bill)}</td>
+                                    {onDelete && (
+                                        <td className="p-4 text-right">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (confirm('Are you sure you want to delete this specific history entry?')) {
+                                                        onDelete(entry);
+                                                    }
+                                                }}
+                                                className="p-2 hover:bg-red-500/20 text-slate-500 hover:text-red-400 rounded-lg transition-colors"
+                                                title="Delete this entry"
+                                            >
+                                                <Trash size={16} />
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             );
                         })}

@@ -9,7 +9,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import { loadTraining } from '@/lib/loadTraining';
+import { getSafeSession } from '@/lib/authUtils';
+import { loadTraining } from '@/lib/api';
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LogOut, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { toast } from 'sonner';
@@ -51,6 +52,7 @@ function SmartWattApp() {
             num_people: 4,
             season: 'Monsoon (June - September)',
             house_type: 'Apartment',
+            location_type: 'Urban',
             kwh: 300,
             estimated_bill: 0
         },
@@ -60,11 +62,21 @@ function SmartWattApp() {
 
     useEffect(() => {
         const checkSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { session } = await getSafeSession();
             if (!session) {
                 router.push('/login');
             } else {
                 setUserId(session.user.id);
+
+                // CHECK REDIRECT: If user refreshed on Output Step (4), go to Dashboard
+                if (typeof window !== 'undefined') {
+                    const savedStep = sessionStorage.getItem('smartwatt_step');
+                    if (savedStep === '4') {
+                        sessionStorage.removeItem('smartwatt_step'); // Clear it so next login doesn't redirect
+                        router.push('/dashboard');
+                        return;
+                    }
+                }
 
                 // Load saved data
                 const { data: savedData, error: loadError } = await loadTraining(session.user.id);
@@ -120,6 +132,7 @@ function SmartWattApp() {
                             num_people: currentData.num_people ?? 4,
                             season: currentData.season ?? 'Monsoon (June - September)',
                             house_type: currentData.house_type ?? 'Apartment',
+                            location_type: currentData.appliance_usage?.location_type ?? 'urban',
                             kwh: currentData.bi_monthly_kwh ?? 300,
                             estimated_bill: currentData.estimated_bill ?? 0
                         },
@@ -139,6 +152,13 @@ function SmartWattApp() {
         router.push('/login');
     };
 
+    // Save Step State to handle Refresh Redirects
+    useEffect(() => {
+        if (typeof window !== 'undefined' && !loading) {
+            sessionStorage.setItem('smartwatt_step', step.toString());
+        }
+    }, [step, loading]);
+
     const nextStep = () => setStep(s => s + 1);
     const prevStep = () => {
         if (step === 4 && data.mode === 'quick') {
@@ -152,7 +172,7 @@ function SmartWattApp() {
         setStep(1);
         setData({
             mode: null,
-            household: { num_people: 4, season: 'Monsoon (June - September)', house_type: 'Apartment', kwh: 300, estimated_bill: 0 },
+            household: { num_people: 4, season: 'Monsoon (June - September)', house_type: 'Apartment', location_type: 'Urban', kwh: 300, estimated_bill: 0 },
             appliances: [],
             details: {}
         });
@@ -239,11 +259,16 @@ function SmartWattApp() {
             {step === 1 && (
                 <HouseholdInfo
                     data={data.household}
-                    onUpdate={(h) => setData(prev => ({ ...prev, household: h }))}
+                    details={data.details} // Pass details!
+                    onUpdate={(h) => setData(prev => ({
+                        ...prev,
+                        household: h,
+                        details: { ...prev.details, location_type: h.location_type } // CRITICAL: Sync location_type to details so it isn't lost/overwritten later
+                    }))}
                     onNext={nextStep}
-                    onBack={handleBack}
+                    onBack={prevStep}
                     mode={data.mode}
-                    trainingId={trainingId!}
+                    trainingId={trainingId}
                 />
             )}
 

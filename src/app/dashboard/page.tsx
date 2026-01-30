@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabaseClient';
-import { loadTraining } from '@/lib/loadTraining';
+import { getSafeSession } from '@/lib/authUtils';
+import { loadTraining } from '@/lib/api';
 import LatestAssessmentDetail from '@/components/dashboard/LatestAssessmentDetail';
 import HistoryTable from '@/components/dashboard/HistoryTable';
 import { LogOut, LayoutDashboard } from 'lucide-react';
@@ -38,7 +39,7 @@ export default function Dashboard() {
     // Initial Load Logic
     useEffect(() => {
         const checkSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { session } = await getSafeSession();
             if (!session) {
                 router.push('/login');
                 return;
@@ -130,6 +131,57 @@ export default function Dashboard() {
         fullRecord?.final_breakdown?.ai_results ||
         fullRecord?.final_breakdown;
 
+    const handleHistoryDelete = async (entryToDelete: any) => {
+        if (!fullRecord) return;
+
+        try {
+            const currentHistory = fullRecord.appliance_usage?.history || [];
+            // Remove the entry matching the specific date timestamp
+            const updatedHistory = currentHistory.filter((h: any) => h.date !== entryToDelete.date);
+
+            // Build Updated Payload
+            const updatedUsage = {
+                ...fullRecord.appliance_usage,
+                history: updatedHistory
+            };
+
+            // Optimistic UI Update
+            setHistory(prev => prev.filter(h => h.date !== entryToDelete.date));
+
+            // Save to DB
+            const { error } = await supabase
+                .from('smartwatt_training')
+                .update({
+                    appliance_usage: updatedUsage,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', fullRecord.id);
+
+            if (error) throw error;
+
+            // Update full record reference
+            setFullRecord((prev: any) => ({ ...prev, appliance_usage: updatedUsage }));
+            toast.success("History entry removed");
+
+            // If we deleted the currently viewed item, switch to the newest available
+            if (selectedId === entryToDelete.date) {
+                if (updatedHistory.length > 0) {
+                    const newest = updatedHistory[updatedHistory.length - 1];
+                    handleHistorySelect(newest);
+                } else {
+                    setLatest(null);
+                    setSelectedId(null);
+                }
+            }
+
+        } catch (e) {
+            console.error("Delete failed", e);
+            toast.error("Failed to delete entry");
+            // Revert would be nice here, but reloading is simpler for MVP
+            fetchData(user.id);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#0e1117] text-slate-200 p-4 md:p-8">
             {/* Header */}
@@ -172,7 +224,7 @@ export default function Dashboard() {
                     {/* Top Consumers Bar Chart */}
                     <div className="lg:col-span-1">
                         <h3 className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-4 ml-1">
-                            Breakdown for {new Date(latest?.date).toLocaleDateString()}
+                            Breakdown for {latest?.date ? new Date(latest.date).toLocaleDateString() : 'Current'}
                         </h3>
                         <ApplianceBarChart breakdown={breakdown} />
                     </div>
@@ -189,6 +241,7 @@ export default function Dashboard() {
                     <HistoryTable
                         history={history}
                         onSelect={handleHistorySelect}
+                        onDelete={handleHistoryDelete}
                         selectedId={selectedId || undefined}
                     />
                 </section>

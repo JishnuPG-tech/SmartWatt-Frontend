@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react';
-import { saveTraining } from '@/lib/saveTraining';
-import {
-    Check, Snowflake, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb,
-    Tv, Monitor, Laptop, Droplet, Zap, Refrigerator, WashingMachine,
-    Microwave, AirVent, CookingPot, Heater, Disc, Sandwich, ShowerHead
-} from 'lucide-react';
-
+import { saveTraining } from '@/lib/api';
+import { Check } from 'lucide-react';
+import { APPLIANCE_CATEGORIES } from '@/config/appliances';
 
 interface Props {
     selected: string[];
     details: any;
-    // State Managment Props
-    // We "Lift State Up". This component doesn't own the data, the parent (page.tsx) does.
-    // We just ask the parent to update it.
     onUpdate: (selected: string[]) => void;
     onDetailsUpdate: (details: any) => void;
     onNext: () => void;
@@ -22,10 +15,7 @@ interface Props {
 }
 
 export default function ApplianceSelection({ selected, details, onUpdate, onDetailsUpdate, onNext, onBack, mode, trainingId }: Props) {
-    // Initialize defaults if not present
-    // Auto-Initialize Defaults
-    // Nobody has 0 fans in Kerala. We pre-fill "5 Fans" so the user doesn't have to start from scratch.
-    // This reduces "Friction" and makes the app feel smarter.
+    // Defaults logic
     useEffect(() => {
         if (details.num_fans === undefined) onDetailsUpdate({ ...details, num_fans: 5 });
         if (details.num_led === undefined) onDetailsUpdate({ ...details, num_led: 15 });
@@ -58,42 +48,6 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
         handleDetailsUpdate({ ...details, [key]: value });
     };
 
-    const categories = [
-        {
-            title: "Major Appliances",
-            items: [
-                { id: 'air_conditioner', label: 'Air Conditioner (AC)', icon: <AirVent className="w-5 h-5 text-cyan-400" /> },
-                { id: 'refrigerator', label: 'Refrigerator / Fridge', icon: <Refrigerator className="w-5 h-5 text-blue-400" /> },
-                { id: 'washing_machine', label: 'Washing Machine', icon: <WashingMachine className="w-5 h-5 text-indigo-400" /> },
-                { id: 'geyser', label: 'Water Heater / Geyser', icon: <ShowerHead className="w-5 h-5 text-red-400" /> },
-                { id: 'microwave', label: 'Microwave Oven', icon: <Microwave className="w-5 h-5 text-orange-400" /> },
-                { id: 'kettle', label: 'Electric Kettle', icon: <Coffee className="w-5 h-5 text-amber-600" /> },
-                { id: 'induction', label: 'Induction Cooktop', icon: <Zap className="w-5 h-5 text-red-500" /> },
-            ]
-        },
-        {
-            title: "Kitchen Appliances",
-            items: [
-                { id: 'mixer', label: 'Mixer / Grinder', icon: <Disc className="w-5 h-5 text-slate-400" /> },
-                { id: 'rice_cooker', label: 'Rice Cooker', icon: <CookingPot className="w-5 h-5 text-white" /> },
-                { id: 'toaster', label: 'Toaster', icon: <Sandwich className="w-5 h-5 text-orange-300" /> },
-                { id: 'food_processor', label: 'Food Processor', icon: <Utensils className="w-5 h-5 text-gray-400" /> },
-            ]
-        },
-        {
-            title: "Other Appliances",
-            items: [
-                { id: 'tv', label: 'Television', icon: <Tv className="w-5 h-5 text-emerald-400" /> },
-                { id: 'desktop', label: 'Desktop Computer', icon: <Monitor className="w-5 h-5 text-blue-500" /> },
-                { id: 'laptop', label: 'Laptop', icon: <Laptop className="w-5 h-5 text-sky-400" /> },
-                { id: 'pump', label: 'Water Pump / Motor', icon: <Droplet className="w-5 h-5 text-blue-600" /> },
-                { id: 'iron', label: 'Iron', icon: <Shirt className="w-5 h-5 text-yellow-500" /> },
-                { id: 'hair_dryer', label: 'Hair Dryer', icon: <Wind className="w-5 h-5 text-pink-400" /> },
-                { id: 'vacuum', label: 'Vacuum Cleaner', icon: <Wind className="w-5 h-5 text-teal-400" /> },
-            ]
-        }
-    ];
-
     return (
         <div className="w-full max-w-7xl mx-auto px-4 animate-in fade-in duration-700">
             {/* Header */}
@@ -122,24 +76,49 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
             </h2>
             <p className="text-[#e2e8f0] mb-8">Select all appliances you have at home</p>
 
+            {/* Config Driven Display */}
             <div className="section space-y-8">
-                {categories.map((cat) => (
+                {APPLIANCE_CATEGORIES.map((cat) => (
                     <div key={cat.title}>
                         <h3 className="text-[#e2e8f0] font-medium text-lg mb-4">{cat.title}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {cat.items.map((item) => (
+                            {cat.items.map((item: any) => (
                                 <div
                                     key={item.id}
-                                    className={`flex items-center space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:shadow-lg group ${selected.includes(item.id) ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700 hover:bg-slate-800'}`}
+                                    className={`flex flex-col p-3 rounded-lg border transition-all cursor-pointer hover:shadow-lg group ${selected.includes(item.id) ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700 hover:bg-slate-800'}`}
                                     onClick={() => toggleAppliance(item.id)}
                                 >
-                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${selected.includes(item.id) ? 'bg-blue-600/20 text-blue-400' : 'bg-slate-800 text-slate-500 group-hover:bg-slate-700 group-hover:text-slate-300'}`}>
-                                        {item.icon}
+                                    <div className="flex items-center space-x-3">
+                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${selected.includes(item.id) ? 'bg-blue-600/20 text-blue-400' : 'bg-slate-800 text-slate-500 group-hover:bg-slate-700 group-hover:text-slate-300'}`}>
+                                            <item.icon className={`w-5 h-5 ${item.color || 'text-slate-400'}`} />
+                                        </div>
+                                        <span className="text-[#e2e8f0] flex-1 select-none font-medium">
+                                            {item.label}
+                                        </span>
+                                        {selected.includes(item.id) && <Check className="w-5 h-5 text-blue-500" />}
                                     </div>
-                                    <span className="text-[#e2e8f0] flex-1 select-none font-medium">
-                                        {item.label}
-                                    </span>
-                                    {selected.includes(item.id) && <Check className="w-5 h-5 text-blue-500" />}
+
+                                    {/* Quantity Slider (Only if configured and selected) */}
+                                    {selected.includes(item.id) && item.quantityConfig && (
+                                        <div className="mt-3 pt-3 border-t border-slate-700/50 animate-in fade-in" onClick={(e) => e.stopPropagation()}>
+                                            <div className="flex justify-between items-center mb-2">
+                                                <label className="text-xs text-slate-400 font-medium uppercase tracking-wide">
+                                                    {item.quantityConfig.label}
+                                                </label>
+                                                <span className="bg-blue-600/20 text-blue-300 px-2 py-0.5 rounded text-xs font-bold">
+                                                    {details[item.quantityConfig.key] ?? item.quantityConfig.defaultValue}
+                                                </span>
+                                            </div>
+                                            <input
+                                                type="range"
+                                                min={item.quantityConfig.min}
+                                                max={item.quantityConfig.max}
+                                                value={details[item.quantityConfig.key] ?? item.quantityConfig.defaultValue}
+                                                onChange={(e) => updateDetail(item.quantityConfig.key!, parseInt(e.target.value))}
+                                                className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -147,133 +126,7 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
                 ))}
             </div>
 
-            {/* Common Items */}
-            <div className="section mt-8">
-                <h3 className="text-[#e2e8f0] font-medium text-lg mb-4">Common Items</h3>
-
-                <div className="space-y-6">
-                    {/* Fans */}
-                    <div className="bg-[#1a202c] p-4 rounded-xl border border-slate-700">
-                        <div className="flex justify-between items-center mb-2">
-                            <label className="text-[#e2e8f0] font-medium">Number of ceiling fans</label>
-                            <span className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold">{fanCount}</span>
-                        </div>
-                        <input
-                            type="range"
-                            min="0" max="15"
-                            value={fanCount}
-                            onChange={(e) => {
-                                const val = parseInt(e.target.value);
-                                updateDetail('num_fans', val);
-                                if (val > 0 && !selected.includes('fans')) toggleAppliance('fans');
-                                if (val === 0 && selected.includes('fans')) toggleAppliance('fans');
-                            }}
-                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                        />
-                        <div className="flex justify-between text-xs text-slate-500 mt-1">
-                            <span>0</span>
-                            <span>15</span>
-                        </div>
-                    </div>
-
-                    {/* Lighting */}
-                    <div className="bg-[#1a202c] p-4 rounded-xl border border-slate-700">
-                        <h4 className="text-[#e2e8f0] font-medium mb-3">Lighting</h4>
-
-                        <div
-                            className={`flex items-center space-x-3 p-3 rounded-lg border mb-4 cursor-pointer hover:bg-slate-800 transition-all ${selected.includes('led_lights') ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700'}`}
-                            onClick={() => toggleAppliance('led_lights')}
-                        >
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('led_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('led_lights') && <Check className="w-3.5 h-3.5 text-white" />}
-                            </div>
-                            <span className="text-[#e2e8f0] flex-1 select-none">LED Bulbs</span>
-                        </div>
-
-                        {selected.includes('led_lights') && (
-                            <div className="animate-in fade-in mt-4 pl-2 border-l-2 border-slate-700">
-                                <div className="flex justify-between items-center mb-2">
-                                    <label className="text-[#e2e8f0] text-sm">Number of LED bulbs</label>
-                                    <span className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold">{ledCount}</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="0" max="30"
-                                    value={ledCount}
-                                    onChange={(e) => updateDetail('num_led', parseInt(e.target.value))}
-                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                />
-                                <div className="flex justify-between text-xs text-slate-500 mt-1">
-                                    <span>0</span>
-                                    <span>30</span>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* CFL Lights */}
-                        <div
-                            className={`flex items-center space-x-3 p-3 rounded-lg border mb-4 cursor-pointer hover:bg-slate-800 transition-all ${selected.includes('cfl_lights') ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700'}`}
-                            onClick={() => toggleAppliance('cfl_lights')}
-                        >
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('cfl_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('cfl_lights') && <Check className="w-3.5 h-3.5 text-white" />}
-                            </div>
-                            <span className="text-[#e2e8f0] flex-1 select-none">CFL Bulbs</span>
-                        </div>
-
-                        {selected.includes('cfl_lights') && (
-                            <div className="animate-in fade-in mt-4 pl-2 border-l-2 border-slate-700 mb-4">
-                                <div className="flex justify-between items-center mb-2">
-                                    <label className="text-[#e2e8f0] text-sm">Number of CFL bulbs</label>
-                                    <span className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold">{details.num_cfl ?? 5}</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="0" max="30"
-                                    value={details.num_cfl ?? 5}
-                                    onChange={(e) => updateDetail('num_cfl', parseInt(e.target.value))}
-                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                />
-                                <div className="flex justify-between text-xs text-slate-500 mt-1">
-                                    <span>0</span>
-                                    <span>30</span>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Tube Lights */}
-                        <div
-                            className={`flex items-center space-x-3 p-3 rounded-lg border mb-4 cursor-pointer hover:bg-slate-800 transition-all ${selected.includes('tube_lights') ? 'bg-blue-600/10 border-blue-500/50' : 'border-slate-700'}`}
-                            onClick={() => toggleAppliance('tube_lights')}
-                        >
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selected.includes('tube_lights') ? 'bg-blue-600 border-blue-600' : 'border-slate-500'}`}>
-                                {selected.includes('tube_lights') && <Check className="w-3.5 h-3.5 text-white" />}
-                            </div>
-                            <span className="text-[#e2e8f0] flex-1 select-none">Tube Lights</span>
-                        </div>
-
-                        {selected.includes('tube_lights') && (
-                            <div className="animate-in fade-in mt-4 pl-2 border-l-2 border-slate-700">
-                                <div className="flex justify-between items-center mb-2">
-                                    <label className="text-[#e2e8f0] text-sm">Number of Tube lights</label>
-                                    <span className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm font-bold">{details.num_tube ?? 5}</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="0" max="30"
-                                    value={details.num_tube ?? 5}
-                                    onChange={(e) => updateDetail('num_tube', parseInt(e.target.value))}
-                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                />
-                                <div className="flex justify-between text-xs text-slate-500 mt-1">
-                                    <span>0</span>
-                                    <span>30</span>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
+            {/* Common Items removed - now handled by generic config above */}
 
             {/* Navigation */}
             <div className="flex justify-between mt-12 pt-6 border-t border-slate-800">

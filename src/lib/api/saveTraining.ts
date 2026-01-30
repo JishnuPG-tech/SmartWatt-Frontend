@@ -1,11 +1,12 @@
-import { supabase } from "./supabaseClient";
-import { TrainingPayload } from "./types";
+import { supabase } from "../supabaseClient";
+import { TrainingPayload } from "../types";
 
 // Define strict shape for the database update
 interface SmartWattTrainingUpdate {
     num_people?: number;
     season?: string;
     house_type?: string;
+    location_type?: string;
     bi_monthly_kwh?: number;
     monthly_kwh?: number;
     estimated_bill?: number;
@@ -45,11 +46,17 @@ export const saveTraining = async (id: string, payload: TrainingPayload) => {
         num_people: payload?.num_people,
         season: payload?.season?.toString(),
         house_type: payload?.house_type,
+        // location_type removed as it doesn't exist in DB schema
         bi_monthly_kwh: payload?.bi_monthly_kwh,
         estimated_bill: payload?.estimated_bill,
 
         // Full JSON for accuracy + training model later
-        appliance_usage: payload?.appliance_usage,
+        // Inject location_type into appliance_usage for persistence
+        appliance_usage: {
+            ...(payload?.appliance_usage || {}),
+            // FIX: Only overwrite if payload.location_type is provided, otherwise keep existing
+            location_type: payload?.location_type ?? payload?.appliance_usage?.location_type
+        },
         selected_appliances: payload?.selected_appliances,
 
         // Results

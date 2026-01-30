@@ -1,100 +1,71 @@
-import { useState, useEffect } from 'react';
-import { saveTraining } from '@/lib/saveTraining';
-import { Home, Castle, Building2, Sun, CloudRain, Snowflake } from 'lucide-react'; // Imports
+import { useState, useEffect, useRef } from 'react';
+import { saveTraining } from '@/lib/api';
+import { Home, Castle, Building2, Sun, CloudRain, Snowflake, MapPin } from 'lucide-react'; // Imports
+import { calculateBill } from '@/lib/tariffUtils';
 
 interface HouseholdData {
     num_people: number;
     season: string;
     house_type: string;
+    location_type: string;
     kwh: number;
     estimated_bill: number;
 }
 
 interface Props {
     data: HouseholdData;
+    details: any; // Add details prop
     onUpdate: (data: HouseholdData) => void;
     onNext: () => void;
     onBack: () => void;
     mode: 'quick' | 'detailed';
-    trainingId: string;
+    trainingId: string | null;
 }
 
-export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, trainingId }: Props) {
+export default function HouseholdInfo({ data, details, onUpdate, onNext, onBack, mode, trainingId }: Props) {
 
-    // KSEB Bill Calculator (The "Mini-Backend")
-    // Use Case: Users want instant feedback. They hate waiting for a server loading spinner.
-    // So, we replicated the KSEB logic right here in the browser. 
-    // It gives instant updates as you type!
-    const calculateBill = (biMonthlyUnits: number) => {
-        const monthlyUnits = biMonthlyUnits / 2;
-        let energyCharge = 0;
+    // KSEB Logic extracted to @/lib/tariffUtils
 
-        // Rates from kseb_tariff.py (Nov 2023)
-        const TELESCOPIC_SLABS = [
-            { limit: 50, rate: 3.25 },
-            { limit: 50, rate: 4.05 },
-            { limit: 50, rate: 5.10 },
-            { limit: 50, rate: 6.95 },
-            { limit: 50, rate: 8.20 }
-        ];
-
-        const FLAT_SLABS = [
-            { limit: 300, rate: 6.40 },
-            { limit: 350, rate: 7.25 },
-            { limit: 400, rate: 7.60 },
-            { limit: 500, rate: 7.90 },
-            { limit: Infinity, rate: 8.80 }
-        ];
-
-        const FSM_RATE = 0.13;
-
-        if (monthlyUnits <= 250) {
-            // Telescopic: The "Layer Cake" Method
-            // First 50 units are cheap. Next 50 are slightly more expensive.
-            // You benefit from the lower tiers.
-            let remaining = monthlyUnits;
-            for (const slab of TELESCOPIC_SLABS) {
-                if (remaining > 0) {
-                    const chunk = Math.min(remaining, slab.limit);
-                    energyCharge += chunk * slab.rate;
-                    remaining -= chunk;
-                } else {
-                    break;
-                }
-            }
-        } else {
-            // Non-Telescopic: The "Flat Rate" Trap
-            // If you consume more than 250 units, KSEB charges you a flat high rate for EVERY unit.
-            // You lose the benefit of the cheap starting tiers. This is why high bills shock people.
-            for (const slab of FLAT_SLABS) {
-                if (monthlyUnits <= slab.limit) {
-                    energyCharge = monthlyUnits * slab.rate;
-                    break;
-                }
-            }
-        }
-
-        const totalEnergyCharge = energyCharge * 2; // For 2 months
-        const fuelSurcharge = biMonthlyUnits * FSM_RATE;
-        const total = totalEnergyCharge + fuelSurcharge;
-
-        return Math.round(total);
-    };
+    // Debounce timer ref
+    const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const handleUpdate = (newData: HouseholdData) => {
         // Recalculate bill if kwh changed
-        const newBill = calculateBill(newData.kwh);
+        const newBill = calculateBill(newData.kwh || 0);
         const updatedData = { ...newData, estimated_bill: newBill };
 
+        // 1. Update UI immediately
         onUpdate(updatedData);
-        saveTraining(trainingId, {
-            num_people: updatedData.num_people,
-            season: updatedData.season,
-            house_type: updatedData.house_type,
-            bi_monthly_kwh: updatedData.kwh,
-            estimated_bill: updatedData.estimated_bill
-        });
+
+        // 2. Debounce Save to DB (500ms delay)
+        // Clear existing timer
+        if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+
+        // Set new timer
+        // set new timer
+        saveTimerRef.current = setTimeout(() => {
+            if (!trainingId) return; // Skip save if no trainingId yet
+            console.log("Saving training data...", updatedData); // Debug log
+            saveTraining(trainingId, {
+                num_people: updatedData.num_people,
+                season: updatedData.season,
+                house_type: updatedData.house_type,
+                location_type: updatedData.location_type,
+                bi_monthly_kwh: updatedData.kwh,
+                estimated_bill: updatedData.estimated_bill,
+                // CRITICAL: Pass existing details so they aren't wiped out
+                appliance_usage: details
+            });
+            saveTimerRef.current = null;
+        }, 500);
     };
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+        };
+    }, []);
 
     const biMonthlyCost = calculateBill(data.kwh);
     const monthlyCost = Math.round(biMonthlyCost / 2);
@@ -211,7 +182,6 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                         ))}
                     </div>
                 </div>
-
                 {/* House Type */}
                 <div>
                     <label className="text-[#e2e8f0] mb-3 block text-base">House Type</label>
@@ -231,6 +201,41 @@ export default function HouseholdInfo({ data, onUpdate, onNext, onBack, mode, tr
                                     className="accent-blue-500 w-4 h-4"
                                 />
                                 <span className="text-[#e2e8f0]">{opt.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Location Type */}
+                <div>
+                    <label className="text-[#e2e8f0] mb-2 block text-base">Location Type</label>
+                    <p className="text-sm text-slate-400 mb-3">
+                        Location affects power quality and appliance efficiency in Kerala
+                    </p>
+                    <div className="space-y-3">
+                        {[
+                            { id: 'urban', label: 'Urban', description: 'City areas with stable power supply', icon: <Building2 className="w-5 h-5 text-purple-400" /> },
+                            { id: 'rural', label: 'Rural', description: 'Village areas with occasional voltage drops', icon: <MapPin className="w-5 h-5 text-green-400" /> }
+                        ].map((opt) => (
+                            <label
+                                key={opt.id}
+                                className={`flex items-start p-4 rounded-lg border cursor-pointer transition-all ${data.location_type === opt.id ? 'bg-blue-600/10 border-blue-500' : 'border-[#334155] hover:bg-[#2c3e50]'}`}
+                                onClick={() => handleUpdate({ ...data, location_type: opt.id })}
+                            >
+                                <div
+                                    className={`w-5 h-5 rounded-full border flex items-center justify-center mr-3 mt-0.5 flex-shrink-0 transition-colors ${data.location_type === opt.id ? 'border-blue-500' : 'border-[#334155]'}`}
+                                >
+                                    {data.location_type === opt.id && <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 animate-in zoom-in duration-200" />}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        {opt.icon}
+                                        <span className={`font-medium ${data.location_type === opt.id ? 'text-white' : 'text-[#e2e8f0]'}`}>
+                                            {opt.label}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs text-[#94a3b8]">{opt.description}</span>
+                                </div>
                             </label>
                         ))}
                     </div>
