@@ -3,7 +3,6 @@ import {
     Disc, CookingPot, Sandwich, Utensils, Tv, Monitor, Laptop, Droplet,
     Shirt, Wind, Lightbulb, Fan
 } from 'lucide-react';
-import React from 'react';
 
 export const APPLIANCE_CATEGORIES = [
     {

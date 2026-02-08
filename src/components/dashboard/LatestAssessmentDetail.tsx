@@ -3,9 +3,16 @@ import BreakdownPieChart from './BreakdownPieChart';
 import { useState } from 'react';
 import DetailedBreakdownModal from './DetailedBreakdownModal';
 
+interface HistoryEntry {
+    date: string;
+    kwh: number;
+    bill: number;
+    [key: string]: any;
+}
+
 interface Props {
-    latest: any;
-    previous?: any;
+    latest: HistoryEntry | null;
+    previous?: HistoryEntry | null;
     fullRecord: any;
     onNavigate: () => void;
 }

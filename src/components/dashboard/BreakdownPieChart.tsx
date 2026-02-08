@@ -1,16 +1,22 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
+interface BreakdownItem {
+    appliance: string;
+    kwh: number;
+    [key: string]: unknown;
+}
+
 interface Props {
-    breakdown: any; // Using 'any' for flexibility, but expected to be { breakdown: [] } or []
+    breakdown: { breakdown?: BreakdownItem[] } | BreakdownItem[] | null;
 }
 
 export default function BreakdownPieChart({ breakdown }: Props) {
     // --- VISUALIZING THE INVISIBLE ---
     // Numbers are boring. We turn them into a donut!
     // Logic: Filter out tiny usage (noise) and sort biggest to smallest.
-    const data = (breakdown?.breakdown || breakdown || [])
-        .filter((item: any) => item.kwh > 0.1)
-        .sort((a: any, b: any) => b.kwh - a.kwh);
+    const data = (Array.isArray(breakdown) ? breakdown : (breakdown?.breakdown || []))
+        .filter((item: BreakdownItem) => item.kwh > 0.1)
+        .sort((a: BreakdownItem, b: BreakdownItem) => b.kwh - a.kwh);
 
     const COLORS = [
         '#3b82f6', '#10b981', '#f59e0b', '#ef4444',

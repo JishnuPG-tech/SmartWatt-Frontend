@@ -10,9 +10,9 @@ export interface PumpDetailCardProps {
     id: string;
     icon: React.ReactNode;
     title: string;
-    values: Record<string, any>;
-    onFieldChange?: (key: string, value: any) => void;
-    onBatchChange?: (updates: Record<string, any>) => void;
+    values: any;
+    onFieldChange?: (key: string, value: string | number) => void;
+    onBatchChange?: (updates: Record<string, unknown>) => void;
     alert?: {
         type: "warning" | "info" | "error";
         message: string;
@@ -121,11 +121,10 @@ export function PumpDetailCard({
                     <button
                         key={preset.label}
                         onClick={() => updateHours(preset.val)}
-                        className={`px-1.5 py-1 rounded text-[9px] font-medium transition-all leading-tight ${
-                            currentHours === preset.val
+                        className={`px-1.5 py-1 rounded text-[9px] font-medium transition-all leading-tight ${currentHours === preset.val
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-slate-700/30'
-                        }`}
+                            }`}
                     >
                         {preset.label.split(' ')[0]}
                     </button>
@@ -134,11 +133,10 @@ export function PumpDetailCard({
 
             {/* Compact Alert */}
             {alert && (
-                <div className={`mt-3 p-2 rounded border-l-2 flex items-start gap-2 ${
-                    alert.type === "warning" ? "bg-orange-900/20 border-orange-500 text-orange-200" :
-                    alert.type === "error" ? "bg-red-900/20 border-red-500 text-red-200" :
-                    "bg-blue-900/20 border-blue-500 text-blue-200"
-                }`}>
+                <div className={`mt-3 p-2 rounded border-l-2 flex items-start gap-2 ${alert.type === "warning" ? "bg-orange-900/20 border-orange-500 text-orange-200" :
+                        alert.type === "error" ? "bg-red-900/20 border-red-500 text-red-200" :
+                            "bg-blue-900/20 border-blue-500 text-blue-200"
+                    }`}>
                     <div className="shrink-0 mt-0.5">
                         {alert.type === 'error' && <AlertCircle className="w-3.5 h-3.5" />}
                         {alert.type === 'warning' && <AlertTriangle className="w-3.5 h-3.5" />}

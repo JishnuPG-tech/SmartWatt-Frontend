@@ -1,10 +1,18 @@
 import { Download, Trash } from 'lucide-react';
 import { useState } from 'react';
 
+interface HistoryEntry {
+    date: string;
+    kwh: number;
+    bill: number;
+    mode?: string;
+    [key: string]: unknown;
+}
+
 interface Props {
-    history: any[];
-    onSelect?: (entry: any) => void;
-    onDelete?: (entry: any) => void;
+    history: HistoryEntry[];
+    onSelect?: (entry: HistoryEntry) => void;
+    onDelete?: (entry: HistoryEntry) => void;
     selectedId?: string | number; // Use date or index if no ID
 }
 

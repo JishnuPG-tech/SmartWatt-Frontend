@@ -114,7 +114,7 @@ function LoginForm() {
                 </form>
 
                 <div className="mt-6 text-center">
-                    <p className="text-slate-400 text-sm mb-4">Don't have an account?</p>
+                    <p className="text-slate-400 text-sm mb-4">Don&apos;t have an account?</p>
                     <Link
                         href="/register"
                         className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"

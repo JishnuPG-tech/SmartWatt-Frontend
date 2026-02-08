@@ -31,10 +31,10 @@ export const simulateSavings = async (
 ) => {
     try {
         // Transform details for each appliance in the simulation
-        const transformedDetails: any = {};
+        const transformedDetails: Record<string, unknown> = {};
         for (const [key, value] of Object.entries(details)) {
             if (typeof value === 'object' && value !== null) {
-                transformedDetails[key] = transformApplianceData(key, value);
+                transformedDetails[key] = transformApplianceData(key, value as Record<string, unknown>);
             } else {
                 transformedDetails[key] = value;
             }

@@ -16,18 +16,19 @@
    Creating an optimized production build ...
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
- Γ£ô Compiled successfully in 79s
+ Γ£ô Compiled successfully in 24.1s
    Running TypeScript ...
 Failed to compile.
 
-./src/app/page.tsx:68:17
-Type error: Cannot find name 'setUserId'.
+./src/lib/energyUtils.ts:17:23
+Type error: Argument of type 'string | number | true | Record<string, unknown>' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
 
-  66 |                 router.push('/login');
-  67 |             } else {
-> 68 |                 setUserId(session.user.id);
-     |                 ^
-  69 |
-  70 |                 // CHECK REDIRECT: If user refreshed on Output Step (4), go to Dashboard
-  71 |                 if (typeof window !== 'undefined') {
+  15 |     const val = details[key];
+  16 |     if (!val || val === 'unknown') return def;
+> 17 |     return parseFloat(val);
+     |                       ^
+  18 | };
+  19 |
+  20 | export const parseStar = (key: string, details: ApplianceUsageDetails) => {
 Next.js build worker exited with code: 1 and signal: null

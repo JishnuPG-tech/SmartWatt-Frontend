@@ -1,13 +1,19 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
 
+interface BreakdownItem {
+    appliance: string;
+    kwh: number;
+    [key: string]: unknown;
+}
+
 interface Props {
-    breakdown: any;
+    breakdown: { breakdown?: BreakdownItem[] } | BreakdownItem[] | null;
 }
 
 export default function ApplianceBarChart({ breakdown }: Props) {
-    const data = (breakdown?.breakdown || breakdown || [])
-        .filter((item: any) => item.kwh > 0.1)
-        .sort((a: any, b: any) => b.kwh - a.kwh)
+    const data = (Array.isArray(breakdown) ? breakdown : (breakdown?.breakdown || []))
+        .filter((item: BreakdownItem) => item.kwh > 0.1)
+        .sort((a: BreakdownItem, b: BreakdownItem) => b.kwh - a.kwh)
         .slice(0, 10); // Top 10 only
 
     const COLORS = [

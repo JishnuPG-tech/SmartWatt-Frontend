@@ -19,8 +19,9 @@ export const getSafeSession = async () => {
         }
 
         return { session: data.session, error: null };
-    } catch (err: any) {
-        console.error("❌ Auth Error:", err.message);
-        return { session: null, error: err };
+    } catch (err) {
+        const error = err as Error;
+        console.error("❌ Auth Error:", error.message);
+        return { session: null, error };
     }
 };

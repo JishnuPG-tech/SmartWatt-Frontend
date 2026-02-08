@@ -2,8 +2,7 @@
 import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { runDiagnostics } from '@/lib/diagnostics';
-import { Check, Download, ChevronRight, HelpCircle, Zap, Trophy, Sun, CheckCircle, CloudRain, Droplets, AlertTriangle, AppWindow, Snowflake, AlertOctagon, Shirt, Flame, Utensils, Coffee, Wind, Lightbulb, Ban, Sparkles, Tv, Monitor, Laptop, Droplet, Scissors, BarChart3, ClipboardList, Brain, Search, Trash2, Refrigerator, WashingMachine, Microwave, AirVent, CookingPot, Sandwich, ShowerHead, Disc } from 'lucide-react';
-import { toast } from 'sonner';
+import { Download, Zap, Wind, Lightbulb, Droplet, Refrigerator, WashingMachine, ChevronRight, HelpCircle, BarChart3, ClipboardList, Brain, Sparkles, Check, AirVent, ShowerHead, Microwave, Coffee, CookingPot, Sandwich, Disc, Tv, Monitor, Laptop, Shirt } from 'lucide-react';
 import SolarCard from './SolarCard';
 import TariffVisualizer from './TariffVisualizer';
 import BenchmarkCard from './BenchmarkCard';
@@ -68,7 +67,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
     }
 
 
-    const avgCost = billDetails.total / household.kwh;
+    const avgCost = billDetails.total / (household.kwh as number);
 
     // --- Grouping Logic Removed ---
     // We want to show ALL appliances to demonstrate model granularity

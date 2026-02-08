@@ -10,10 +10,10 @@ interface SmartWattTrainingUpdate {
     bi_monthly_kwh?: number;
     monthly_kwh?: number;
     estimated_bill?: number;
-    appliance_usage?: any; // JSONB
+    appliance_usage?: Record<string, unknown>; // JSONB
     selected_appliances?: string[];
-    final_breakdown?: any; // JSONB
-    ai_results?: any; // JSONB
+    final_breakdown?: Record<string, unknown>; // JSONB
+    ai_results?: Record<string, unknown>; // JSONB
     bill_estimate?: number;
     total_units_estimated?: number;
     updated_at: string;
@@ -30,6 +30,10 @@ interface SmartWattTrainingUpdate {
     mixer_hours?: number | string;
     fridge_hours?: number | string;
     iron_hours?: number | string;
+
+    // Self-Learning Columns
+    input_kwh?: number;
+    predicted_kwh?: number;
 }
 
 export const saveTraining = async (id: string, payload: TrainingPayload) => {
@@ -74,18 +78,36 @@ export const saveTraining = async (id: string, payload: TrainingPayload) => {
 
     // Only map appliance details if appliance_usage is present
     if (data) {
-        updateData.num_fans = data.num_fans;
-        updateData.num_led = data.num_led;
-        updateData.num_cfl = data.num_cfl;
-        updateData.num_tube = data.num_tube;
+        const dataAny = data as any; // Cast to any to bypass strict type checking
+        updateData.num_fans = dataAny.num_fans;
+        updateData.num_led = dataAny.num_led;
+        updateData.num_cfl = dataAny.num_cfl;
+        updateData.num_tube = dataAny.num_tube;
 
-        updateData.fan_hours = data.fan_hours;
-        updateData.led_hours = data.led_hours;
-        updateData.tv_hours = data.tv_hours;
-        updateData.pump_hours = data.pump_hours;
-        updateData.mixer_hours = data.mixer_hours;
-        updateData.fridge_hours = data.fridge_hours;
-        updateData.iron_hours = data.iron_hours;
+        updateData.fan_hours = dataAny.fan_hours;
+        updateData.led_hours = dataAny.led_hours;
+        updateData.tv_hours = dataAny.tv_hours;
+        updateData.pump_hours = dataAny.pump_hours;
+        updateData.mixer_hours = dataAny.mixer_hours;
+        updateData.fridge_hours = dataAny.fridge_hours;
+        updateData.iron_hours = dataAny.iron_hours;
+    }
+
+    // === SELF-LEARNING: Extract predicted_kwh and input_kwh ===
+    // These columns enable fast self-learning without JSON parsing
+    if (payload?.bi_monthly_kwh) {
+        updateData.input_kwh = payload.bi_monthly_kwh;  // User's actual kWh from KSEB bill
+    }
+
+    if (payload?.final_breakdown) {
+        // Extract AI's prediction from final_breakdown.rawTotal
+        const breakdown = typeof payload.final_breakdown === 'string'
+            ? JSON.parse(payload.final_breakdown)
+            : payload.final_breakdown;
+
+        if (breakdown?.rawTotal) {
+            updateData.predicted_kwh = breakdown.rawTotal;  // AI's predicted kWh
+        }
     }
 
     // Remove undefined keys (though Supabase usually handles undefined by ignoring, it's safer to be clean)

@@ -6,7 +6,7 @@
 /**
  * Transform field names from UI format to backend format
  */
-function transformFieldNames(appliance: string, data: any): any {
+function transformFieldNames(appliance: string, data: Record<string, unknown>): Record<string, unknown> {
   const fieldMappings: Record<string, Record<string, string>> = {
     ac: {
       'ac_star': 'ac_star_rating',
@@ -81,7 +81,7 @@ function transformFieldNames(appliance: string, data: any): any {
   };
 
   const mapping = fieldMappings[appliance] || {};
-  const transformed: any = {};
+  const transformed: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(data)) {
     const newKey = mapping[key] || key;
@@ -94,7 +94,7 @@ function transformFieldNames(appliance: string, data: any): any {
 /**
  * Transform field values to correct types and formats
  */
-function transformFieldValues(data: any): any {
+function transformFieldValues(data: Record<string, unknown>): Record<string, unknown> {
   const transformed = { ...data };
 
   // Transform star ratings: "5-star" → 5
@@ -228,7 +228,7 @@ function transformFieldValues(data: any): any {
       'top_load': 'top_load',
       'front_load': 'front_load'
     };
-    transformed.wm_type = typeMap[transformed.wm_type] || transformed.wm_type;
+    transformed.wm_type = typeMap[String(transformed.wm_type)] || transformed.wm_type;
   }
 
   return transformed;
@@ -237,7 +237,7 @@ function transformFieldValues(data: any): any {
 /**
  * Derive missing fields from pattern selections
  */
-function deriveFieldsFromPattern(appliance: string, data: any): any {
+function deriveFieldsFromPattern(appliance: string, data: Record<string, unknown>): Record<string, unknown> {
   const derived = { ...data };
 
   // AC: Derive ac_usage_pattern from ac_pattern
@@ -254,7 +254,7 @@ function deriveFieldsFromPattern(appliance: string, data: any): any {
       'heavy': 5.5,        // 5-6 cycles
       'very_heavy': 7      // 7+ cycles
     };
-    derived.wm_cycles_per_week = cyclesMap[data.wm_pattern] || 3.5;
+    derived.wm_cycles_per_week = cyclesMap[String(data.wm_pattern)] || 3.5;
     delete derived.wm_pattern;
   }
 
@@ -264,7 +264,7 @@ function deriveFieldsFromPattern(appliance: string, data: any): any {
 /**
  * Main transformation function - applies all transformations
  */
-export function transformApplianceData(appliance: string, uiData: any): any {
+export function transformApplianceData(appliance: string, uiData: Record<string, unknown>): Record<string, unknown> {
   console.log('🔄 Transforming data for:', appliance);
   console.log('📥 Input:', uiData);
 

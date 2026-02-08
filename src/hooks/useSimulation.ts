@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { simulateSavings, calculateBill } from '@/lib/api';
 
-export function useSimulation(household: any, details: any, billDetails: any) {
-    const [optimization, setOptimization] = useState<any>(null);
+export function useSimulation(
+    household: any,
+    details: Record<string, unknown>,
+    billDetails: any
+) {
+    const [optimization, setOptimization] = useState<any | null>(null);
     const [isSimulating, setIsSimulating] = useState(false);
 
     const runSimulation = async () => {
@@ -16,9 +20,20 @@ export function useSimulation(household: any, details: any, billDetails: any) {
         const toastId = toast.loading("Analyzing consumption patterns...");
 
         try {
+
             // Context: Pass Monthly Average Units (not Bi-Monthly) for better AI Context
             const monthlyUnits = household.kwh / 2;
-            const simRes = await simulateSavings(details, monthlyUnits);
+
+            // MERGE HOUSEHOLD CONTEXT (Critical Fix)
+            // The simulation service needs these to run the AI models correctly.
+            const simulationPayload = {
+                ...details,
+                n_occupants: household.num_people || 4,
+                season: household.season || 'monsoon',
+                location_type: household.location_type || ((household.house_type === 'independent') ? 'rural' : 'urban')
+            };
+
+            const simRes = await simulateSavings(simulationPayload, monthlyUnits);
 
             if (simRes.status === 'success' && simRes.insights) {
                 let totalSavedKwh = 0;

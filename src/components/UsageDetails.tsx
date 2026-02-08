@@ -11,8 +11,8 @@ import { getUsageAlert } from '@/lib/usageAlerts';
 
 interface Props {
     selected: string[];
-    details: Record<string, any>;
-    onUpdate: (details: Record<string, any>) => void;
+    details: any;
+    onUpdate: (details: any) => void;
     onNext: () => void;
     onBack: () => void;
     mode: 'quick' | 'detailed';

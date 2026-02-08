@@ -50,7 +50,7 @@ export interface ApplianceUsageDetails {
     iron_hours?: string | number;
 
     // Dynamic keys fallback (allows string indexing)
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined | Record<string, unknown>;
 }
 
 export interface BillResult {
@@ -88,8 +88,8 @@ export interface TrainingPayload {
     appliance_usage?: ApplianceUsageDetails;
     selected_appliances?: string[];
 
-    final_breakdown?: any;
-    ai_results?: any;
+    final_breakdown?: Record<string, unknown>;
+    ai_results?: Record<string, unknown>;
     bill_estimate?: number;
     total_units_estimated?: number;
 }

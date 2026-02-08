@@ -44,7 +44,6 @@ function SmartWattApp() {
     const isNewAssessment = searchParams.get('new') === 'true';
     const [loading, setLoading] = useState(true);
     const [step, setStep] = useState(1);
-    const [userId, setUserId] = useState<string | null>(null);
     const [trainingId, setTrainingId] = useState<string | null>(null);
     const [data, setData] = useState({
         mode: null as 'quick' | 'detailed' | null,
@@ -57,7 +56,7 @@ function SmartWattApp() {
             estimated_bill: 0
         },
         appliances: [] as string[],
-        details: {} as any
+        details: {} as Record<string, unknown>
     });
 
     useEffect(() => {
@@ -66,7 +65,7 @@ function SmartWattApp() {
             if (!session) {
                 router.push('/login');
             } else {
-                setUserId(session.user.id);
+
 
                 // CHECK REDIRECT: If user refreshed on Output Step (4), go to Dashboard
                 if (typeof window !== 'undefined') {
@@ -144,7 +143,7 @@ function SmartWattApp() {
             }
         };
         checkSession();
-    }, [router]);
+    }, [router, isNewAssessment]);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { saveTraining } from '@/lib/api';
 import { Home, Castle, Building2, Sun, CloudRain, Snowflake, MapPin } from 'lucide-react'; // Imports
 import { calculateBill } from '@/lib/tariffUtils';
@@ -14,7 +14,7 @@ interface HouseholdData {
 
 interface Props {
     data: HouseholdData;
-    details: any; // Add details prop
+    details: Record<string, unknown>; // Add details prop
     onUpdate: (data: HouseholdData) => void;
     onNext: () => void;
     onBack: () => void;
@@ -54,7 +54,7 @@ export default function HouseholdInfo({ data, details, onUpdate, onNext, onBack,
                 bi_monthly_kwh: updatedData.kwh,
                 estimated_bill: updatedData.estimated_bill,
                 // CRITICAL: Pass existing details so they aren't wiped out
-                appliance_usage: details
+                appliance_usage: details as any
             });
             saveTimerRef.current = null;
         }, 500);
@@ -247,7 +247,7 @@ export default function HouseholdInfo({ data, details, onUpdate, onNext, onBack,
                         Total units from your KSEB bill
                     </label>
                     <p className="text-sm text-slate-400 mb-3">
-                        Note: KSEB bills are bi-monthly (2 months). Look for 'Units Consumed' or 'Total Units' on your bill.
+                        Note: KSEB bills are bi-monthly (2 months). Look for &apos;Units Consumed&apos; or &apos;Total Units&apos; on your bill.
                     </p>
                     <input
                         type="number"

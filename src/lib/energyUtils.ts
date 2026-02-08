@@ -13,15 +13,17 @@ export const getNum = (key: string, def: number, details: ApplianceUsageDetails)
 
 export const parseFloatVal = (key: string, def: number, details: ApplianceUsageDetails) => {
     const val = details[key];
-    if (!val || val === 'unknown') return def;
-    return parseFloat(val);
+    if (val === undefined || val === null || val === 'unknown') return def;
+    if (typeof val === 'number') return val;
+    return parseFloat(String(val));
 };
 
 export const parseStar = (key: string, details: ApplianceUsageDetails) => {
     const val = details[key];
     if (!val || val === 'unknown') return 3;
-    if (val.includes('5')) return 5;
-    if (val.includes('4')) return 4;
+    const strVal = String(val);
+    if (strVal.includes('5')) return 5;
+    if (strVal.includes('4')) return 4;
     return 3;
 };
 
@@ -121,7 +123,7 @@ export const distributeEnergyGap = (
     estimatedTotalCost: number
 ): BreakdownItem[] => {
 
-    let totalCalculatedKwh = breakdown.reduce((sum, item) => sum + item.kwh, 0);
+    const totalCalculatedKwh = breakdown.reduce((sum, item) => sum + item.kwh, 0);
     const gap = totalBillKwh - totalCalculatedKwh;
 
     // UNIFIED DISTRIBUTION STRATEGY (The "Fair Share" Algorithm)
@@ -138,7 +140,7 @@ export const distributeEnergyGap = (
     // Rule: Take at least 5% of the bill, or 35% of the unexplainable gap (whichever is BIGGER).
     const currentTotal = breakdown.reduce((sum, item) => sum + item.kwh, 0);
     const minOverhead = totalBillKwh * 0.05;
-    let overheadShare = Math.max(gap * 0.35, minOverhead);
+    const overheadShare = Math.max(gap * 0.35, minOverhead);
 
     // 2. Define Target for Appliances
     // The rest of the bill must be explained by appliances.

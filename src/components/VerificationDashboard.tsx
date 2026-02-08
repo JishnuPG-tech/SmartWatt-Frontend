@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getPhysicsRatio, getExactModeWatts } from '@/lib/energyUtils';
 import { Zap, X, Check } from 'lucide-react';
 
@@ -6,13 +6,21 @@ interface TestScenario {
     name: string;
     appliance: string;
     description: string;
-    inputs: any;
-    baselineInputs?: any;
+    inputs: Record<string, string | number>;
+    baselineInputs?: Record<string, string | number>;
     expectedCondition: (result: number, baseline: number) => boolean;
 }
 
+interface TestResult extends TestScenario {
+    ratio: number;
+    baseRatio: number;
+    watts: number;
+    baseWatts: number;
+    passed: boolean;
+}
+
 export default function VerificationDashboard({ onClose }: { onClose: () => void }) {
-    const [results, setResults] = useState<any[]>([]);
+    const [results, setResults] = useState<TestResult[]>([]);
 
     const scenarios: TestScenario[] = [
         {
@@ -57,11 +65,7 @@ export default function VerificationDashboard({ onClose }: { onClose: () => void
         }
     ];
 
-    useEffect(() => {
-        runTests();
-    }, []);
-
-    const runTests = () => {
+    const runTests = useCallback(() => {
         const newResults = scenarios.map(scenario => {
             // Check Ratio Logic (Physics-Scaled AI proxy)
             const ratio = getPhysicsRatio(scenario.appliance, scenario.inputs);
@@ -83,7 +87,12 @@ export default function VerificationDashboard({ onClose }: { onClose: () => void
             };
         });
         setResults(newResults);
-    };
+    }, [scenarios]);
+
+    useEffect(() => {
+        // eslint-disable-next-line
+        runTests();
+    }, [runTests]);
 
     return (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4">

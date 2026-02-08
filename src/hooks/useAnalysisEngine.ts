@@ -1,14 +1,22 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { calculateBill, predictAllAppliances, saveTraining } from '@/lib/api';
-import { getPhysicsRatio, getExactModeWatts, distributeEnergyGap } from '@/lib/energyUtils';
+import { getExactModeWatts, distributeEnergyGap } from '@/lib/energyUtils';
 import { toast } from 'sonner';
+import { BillResult } from '@/lib/types';
+
+interface AnomalyInfo {
+    status: string;
+    message: string;
+    type?: string;
+    [key: string]: unknown;
+}
 
 export interface AnalysisResult {
     totalUsage: number;
     billEstimate: number;
-    breakdown: any[];
+    breakdown: Array<{ id?: string; name?: string; appliance?: string; kwh: number;[key: string]: unknown }>;
     predictions: Record<string, number>;
-    anomalies: Record<string, any>;
+    anomalies: Record<string, AnomalyInfo>;
     uncertainties: Record<string, number>;
     rawTotal: number;
     metrics: {
@@ -19,17 +27,18 @@ export interface AnalysisResult {
 }
 
 export function useAnalysisEngine(
-    household: any,
+    household: Record<string, unknown>,
     appliances: string[],
-    details: any,
+    details: Record<string, unknown>,
     trainingId: string,
     mode?: 'quick' | 'detailed' | null
 ) {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [results, setResults] = useState<AnalysisResult | null>(null);
-    const [billDetails, setBillDetails] = useState<any>(null);
+    const [billDetails, setBillDetails] = useState<BillResult | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const hasRunRef = useRef(false);
 
     const runAnalysis = useCallback(async () => {
         try {
@@ -37,10 +46,10 @@ export function useAnalysisEngine(
             setError(null);
             setProgress(0);
 
-            const totalBillKwh = household.kwh;
+            const totalBillKwh = household.kwh as number;
             const predictions: Record<string, number> = {};
             const uncertainties: Record<string, number> = {};
-            const anomalies: Record<string, any> = {};
+            const anomalies: Record<string, AnomalyInfo> = {};
             let rawTotal = 0;
 
             // 1. Calculate Bill
@@ -78,7 +87,7 @@ export function useAnalysisEngine(
             }
 
             const requests: any[] = [];
-            const requestMap: Record<string, any> = {};
+            const requestMap: Record<string, Record<string, unknown>> = {};
             const calculationDetails = (mode === 'quick') ? {} : details;
 
             // Loop and Prepare Payloads
@@ -309,7 +318,7 @@ export function useAnalysisEngine(
                     let uncertainty = 0;
 
                     const aiRes = batchResults[name] || { status: 'error', prediction: 0 };
-                    let baseVal = aiRes.status === 'success' ? aiRes.prediction : 0;
+                    const baseVal = aiRes.status === 'success' ? aiRes.prediction : 0;
 
                     const ctx = requestMap[name];
                     // val = baseVal * physicsRatio; 
@@ -356,7 +365,7 @@ export function useAnalysisEngine(
                         else if (name === 'cfl_bulb') { hours = getNum('cfl_hours', 5); count = 2; }
                         else if (name === 'fridge') hours = getNum('fridge_hours', 24);
                         else if (name === 'television') {
-                            const tvPattern = details.tv_pattern || 'moderate';
+                            const tvPattern = (details.tv_pattern as string) || 'moderate';
                             hours = getNum('tv_hours', patternToHoursExact('tv', tvPattern, 4));
                         }
                         else if (name === 'washing_machine') hours = (parseFloatVal('wm_cycles_per_week', 4) * 1.5) / 7;
@@ -382,7 +391,7 @@ export function useAnalysisEngine(
                                 const ageFactor = details.fridge_age === '10+' ? 1.3 : 1.0;
                                 val = baseUnits * ageFactor * (hours / 24);
                             } else {
-                                const manualWatts = getExactModeWatts(name, details);
+                                const manualWatts = getExactModeWatts(name, details as any);
                                 val = (manualWatts * hours * 30 * count) / 1000;
                             }
                             uncertainty = val * 0.05;
@@ -402,7 +411,8 @@ export function useAnalysisEngine(
 
             // Confidence
             let totalScore = 0, totalWeight = 0;
-            let dominantModel = "Hybrid AI-Physics", dominantAccuracy = "High Accuracy";
+            const dominantModel = "Hybrid AI-Physics";
+            let dominantAccuracy = "High Accuracy";
             itemsToPredict.forEach(name => {
                 const aiRes = batchResults[name];
                 const kwh = predictions[name] || 0;
@@ -418,7 +428,14 @@ export function useAnalysisEngine(
             const roundedConfidence = Math.min(99.9, Math.max(60.0, finalConfidence));
 
             const estimatedTotalCost = billRes.total;
-            const breakdown: any[] = [];
+            const breakdown: Array<{
+                id: string;
+                name: string;
+                kwh: number;
+                uncertainty?: number;
+                percentage: number;
+                cost: number;
+            }> = [];
             let totalCalculatedKwh = 0;
 
             Object.entries(predictions).forEach(([name, kwh]) => {
@@ -436,20 +453,20 @@ export function useAnalysisEngine(
                         id: name,
                         name: displayName,
                         kwh,
-                        uncertainty: uncertainties[name],
+                        uncertainty: uncertainties[name] || 0,
                         percentage,
                         cost
                     });
                 }
             });
 
-            const processedBreakdown = distributeEnergyGap(breakdown, totalBillKwh, estimatedTotalCost);
+            const processedBreakdown = distributeEnergyGap(breakdown as any[], totalBillKwh, estimatedTotalCost);
             const sortedBreakdown = [...processedBreakdown].sort((a, b) => b.kwh - a.kwh);
 
             const finalResults = {
                 totalUsage: totalBillKwh,
                 billEstimate: estimatedTotalCost,
-                breakdown: sortedBreakdown,
+                breakdown: sortedBreakdown as any,
                 predictions,
                 anomalies,
                 uncertainties,
@@ -466,7 +483,7 @@ export function useAnalysisEngine(
             // Auto Save
             const newEntry = {
                 date: new Date().toISOString(),
-                kwh: household.kwh,
+                kwh: household.kwh as number,
                 bill: Math.floor(billRes.total),
                 mode: details.mode || 'Standard',
                 // FIX: Store detailed results in history so Dashboard can show past breakdowns
@@ -474,7 +491,7 @@ export function useAnalysisEngine(
                 metrics: finalResults.metrics
             };
             const isValidEntry = newEntry.bill > 0 || newEntry.kwh < 5;
-            const currentHistory = details.history || [];
+            const currentHistory = (details.history as any[]) || [];
             const lastEntry = currentHistory[currentHistory.length - 1];
             const isDuplicate = lastEntry && lastEntry.kwh === newEntry.kwh && lastEntry.bill === newEntry.bill;
 
@@ -483,8 +500,10 @@ export function useAnalysisEngine(
 
             saveTraining(trainingId, {
                 estimated_bill: estimatedTotalCost,
-                ai_results: finalResults,
-                appliance_usage: { ...details, history: updatedHistory }
+                bi_monthly_kwh: household.kwh as number,  // Include actual kWh for input_kwh column
+                final_breakdown: finalResults,  // Use final_breakdown for self-learning
+                ai_results: finalResults,  // Keep for backward compatibility
+                appliance_usage: { ...details, history: updatedHistory } as any
             });
 
             toast.success("Analysis complete!");
@@ -498,8 +517,15 @@ export function useAnalysisEngine(
         }
     }, [household, appliances, details, trainingId, mode]);
 
+    // Auto-run analysis on mount
     useEffect(() => {
-        runAnalysis();
+        if (!hasRunRef.current) {
+            hasRunRef.current = true;
+            // Wrap async call to satisfy ESLint
+            void (async () => {
+                await runAnalysis();
+            })();
+        }
     }, [runAnalysis]);
 
     return { loading, progress, results, billDetails, error, runAnalysis };

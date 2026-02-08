@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { saveTraining } from '@/lib/api';
 import { Check } from 'lucide-react';
 import { APPLIANCE_CATEGORIES } from '@/config/appliances';
 
 interface Props {
     selected: string[];
-    details: any;
+    details: Record<string, unknown>;
     onUpdate: (selected: string[]) => void;
-    onDetailsUpdate: (details: any) => void;
+    onDetailsUpdate: (details: Record<string, unknown>) => void;
     onNext: () => void;
     onBack: () => void;
     mode: 'quick' | 'detailed';
@@ -21,9 +21,9 @@ export default function ApplianceSelection({ selected, details, onUpdate, onDeta
         if (details.num_led === undefined) onDetailsUpdate({ ...details, num_led: 15 });
         if (details.num_cfl === undefined) onDetailsUpdate({ ...details, num_cfl: 5 });
         if (details.num_tube === undefined) onDetailsUpdate({ ...details, num_tube: 5 });
-    }, []);
+    }, [details, onDetailsUpdate]);
 
-    const fanCount = details.num_fans ?? 5;
+    const fanCount = (details.num_fans as number | undefined) ?? 5;
     const ledCount = details.num_led ?? 15;
 
     const handleUpdate = (newSelected: string[]) => {

@@ -16,18 +16,22 @@
    Creating an optimized production build ...
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
- Γ£ô Compiled successfully in 79s
+ Γ£ô Compiled successfully in 46s
    Running TypeScript ...
 Failed to compile.
 
-./src/app/page.tsx:68:17
-Type error: Cannot find name 'setUserId'.
+./src/components/dashboard/LatestAssessmentDetail.tsx:18:27
+Type error: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'string | number'.
 
-  66 |                 router.push('/login');
-  67 |             } else {
-> 68 |                 setUserId(session.user.id);
-     |                 ^
-  69 |
-  70 |                 // CHECK REDIRECT: If user refreshed on Output Step (4), go to Dashboard
-  71 |                 if (typeof window !== 'undefined') {
+  16 |     if (!latest) return null;
+  17 |
+> 18 |     const date = new Date(latest.date).toLocaleDateString(undefined, {
+     |                           ^
+  19 |         weekday: 'long',
+  20 |         year: 'numeric',
+  21 |         month: 'long',
 Next.js build worker exited with code: 1 and signal: null

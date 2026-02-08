@@ -18,7 +18,7 @@ export interface ApplianceCardProps {
     selectedPattern: string;
     onPatternChange: (value: string) => void;
     onFieldChange?: (key: string, value: string) => void;
-    values?: Record<string, any>;
+    values?: any;
     alert?: {
         type: "warning" | "info" | "error";
         message: string;

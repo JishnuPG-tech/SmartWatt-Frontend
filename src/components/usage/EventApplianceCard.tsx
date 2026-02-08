@@ -11,9 +11,9 @@ export interface EventCardProps {
     id: string; // 'kettle', 'mixer', 'iron' etc
     icon: ReactNode;
     title: string;
-    values: Record<string, any>;
-    onFieldChange?: (key: string, value: any) => void;
-    onBatchChange?: (updates: Record<string, any>) => void;
+    values: any;
+    onFieldChange?: (key: string, value: string | number) => void;
+    onBatchChange?: (updates: Record<string, unknown>) => void;
     alert?: {
         type: "warning" | "info" | "error";
         message: string;
@@ -49,9 +49,9 @@ export function EventApplianceCard({
     const durKey = `${id}_duration`;
     const hoursKey = `${id}_hours`;
 
-    const frequency = values[freqKey] || 'weekly'; // daily, 2-3, weekly, rarely
+    const frequency = (values[freqKey] as string) || 'weekly'; // daily, 2-3, weekly, rarely
     // Default to middle option '15' if not set
-    const duration = values[durKey] || '15';
+    const duration = (values[durKey] as string) || '15';
 
     // --- CALCULATION LOGIC ---
     const calculateHours = (freq: string, durVal: string) => {

@@ -1,5 +1,3 @@
-import { Activity } from 'lucide-react';
-
 export default function SystemActiveHeader() {
     return (
         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/30 border border-emerald-500/20 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.1)]">

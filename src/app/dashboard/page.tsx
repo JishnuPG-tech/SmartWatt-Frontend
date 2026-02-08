@@ -24,15 +24,39 @@ const ApplianceBarChart = dynamic(() => import('@/components/dashboard/Appliance
     loading: () => <Skeleton className="h-[350px] w-full rounded-2xl bg-slate-800/50" />
 });
 
+interface User {
+    id: string;
+    email?: string;
+}
+
+interface HistoryEntry {
+    date: string;
+    kwh: number;
+    bill: number;
+    mode?: string;
+    breakdown?: any;
+    final_breakdown?: any;
+    [key: string]: unknown;
+}
+
+interface FullRecord {
+    appliance_usage?: {
+        history?: HistoryEntry[];
+        [key: string]: unknown;
+    };
+    final_breakdown?: any;
+    [key: string]: unknown;
+}
+
 export default function Dashboard() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<any>(null);
-    const [history, setHistory] = useState<any[]>([]);
-    const [latest, setLatest] = useState<any>(null);
-    const [fullRecord, setFullRecord] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
+    const [latest, setLatest] = useState<HistoryEntry | null>(null);
+    const [fullRecord, setFullRecord] = useState<FullRecord | null>(null);
 
-    const [previous, setPrevious] = useState<any>(null);
+    const [previous, setPrevious] = useState<HistoryEntry | null>(null);
 
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -59,7 +83,7 @@ export default function Dashboard() {
                 if (data.appliance_usage?.history) {
                     const hist = data.appliance_usage.history;
                     // Deduplicate
-                    const uniqueHist = hist.filter((entry: any, index: number) => {
+                    const uniqueHist = hist.filter((entry: HistoryEntry, index: number) => {
                         if (index === 0) return true;
                         const prev = hist[index - 1];
                         return !(entry.kwh === prev.kwh && entry.bill === prev.bill && entry.mode === prev.mode);
@@ -86,7 +110,7 @@ export default function Dashboard() {
         }
     };
 
-    const handleHistorySelect = (entry: any) => {
+    const handleHistorySelect = (entry: HistoryEntry) => {
         setLatest(entry); // 'latest' now acts as 'selected'
         setSelectedId(entry.date);
 
@@ -132,7 +156,7 @@ export default function Dashboard() {
         fullRecord?.final_breakdown;
 
     const handleHistoryDelete = async (entryToDelete: any) => {
-        if (!fullRecord) return;
+        if (!fullRecord || !user) return;
 
         try {
             const currentHistory = fullRecord.appliance_usage?.history || [];

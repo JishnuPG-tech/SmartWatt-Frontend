@@ -1,4 +1,10 @@
-export const generatePDF = async (household: any, billDetails: any, results: any, avgCost: number, smartInsights: any[]) => {
+export const generatePDF = async (
+    household: any,
+    billDetails: any,
+    results: any,
+    avgCost: number,
+    smartInsights: any[]
+) => {
     try {
         const jsPDF = (await import('jspdf')).default;
         const autoTable = (await import('jspdf-autotable')).default;

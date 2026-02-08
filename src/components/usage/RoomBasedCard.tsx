@@ -10,9 +10,9 @@ export interface RoomBasedCardProps {
     id: string; // 'led_lights', 'fans', etc
     icon: React.ReactNode;
     title: string;
-    values: Record<string, any>;
-    onFieldChange?: (key: string, value: any) => void;
-    onBatchChange?: (updates: Record<string, any>) => void;
+    values: any;
+    onFieldChange?: (key: string, value: string | number) => void;
+    onBatchChange?: (updates: Record<string, unknown>) => void;
     alert?: {
         type: "warning" | "info" | "error";
         message: string;

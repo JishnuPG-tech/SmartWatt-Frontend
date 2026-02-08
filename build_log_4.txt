@@ -16,18 +16,18 @@
    Creating an optimized production build ...
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
- Γ£ô Compiled successfully in 79s
+ Γ£ô Compiled successfully in 45s
    Running TypeScript ...
 Failed to compile.
 
-./src/app/page.tsx:68:17
-Type error: Cannot find name 'setUserId'.
+./src/components/ResultsReport.tsx:70:21
+Type error: 'billDetails.total' is of type 'unknown'.
 
-  66 |                 router.push('/login');
-  67 |             } else {
-> 68 |                 setUserId(session.user.id);
-     |                 ^
+  68 |
   69 |
-  70 |                 // CHECK REDIRECT: If user refreshed on Output Step (4), go to Dashboard
-  71 |                 if (typeof window !== 'undefined') {
+> 70 |     const avgCost = billDetails.total / household.kwh;
+     |                     ^
+  71 |
+  72 |     // --- Grouping Logic Removed ---
+  73 |     // We want to show ALL appliances to demonstrate model granularity
 Next.js build worker exited with code: 1 and signal: null

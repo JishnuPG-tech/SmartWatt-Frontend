@@ -1,7 +1,15 @@
 import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
+interface HistoryEntry {
+    date: string;
+    kwh: number;
+    bill: number;
+    mode?: string;
+    [key: string]: unknown;
+}
+
 interface Props {
-    history: any[];
+    history: HistoryEntry[];
 }
 
 export default function UsageChart({ history }: Props) {
