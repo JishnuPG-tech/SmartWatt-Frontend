@@ -1,4 +1,4 @@
-/**
+/** 
  * Centralized Physics Constants for SmartWatt
  * ===========================================
  * Defines baseline wattage and efficiency factors for all appliances.

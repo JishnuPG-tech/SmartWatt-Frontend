@@ -112,7 +112,7 @@ export interface BreakdownItem {
     cost: number;
 }
 
-/**
+/** 
  * Smartly distributes the gap between Physics Sum and Bill Input.
  * - If Physics < Bill: Distributes gap using caps and uncertainty weights.
  * - If Physics > Bill: Scales down proportionally.
@@ -160,7 +160,8 @@ export const distributeEnergyGap = (
 
         let totalAbsorbable = 0;
         const targets = breakdown.map(item => {
-            const key = Object.keys(CAPS).find(k => item.name.toLowerCase().includes(k)) || 'default';
+            const itemName = item.name?.toLowerCase() || '';
+            const key = Object.keys(CAPS).find(k => itemName.includes(k)) || 'default';
             const maxKwh = item.kwh * CAPS[key];
             const room = Math.max(0, maxKwh - item.kwh);
             const weight = (item.uncertainty || 10) / 10;

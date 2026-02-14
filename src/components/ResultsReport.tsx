@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { runDiagnostics } from '@/lib/diagnostics';
 import { Download, Zap, Wind, Lightbulb, Droplet, Refrigerator, WashingMachine, ChevronRight, HelpCircle, BarChart3, ClipboardList, Brain, Sparkles, Check, AirVent, ShowerHead, Microwave, Coffee, CookingPot, Sandwich, Disc, Tv, Monitor, Laptop, Shirt } from 'lucide-react';
-import SolarCard from './SolarCard';
+
 import TariffVisualizer from './TariffVisualizer';
 import BenchmarkCard from './BenchmarkCard';
 import InteractiveLoader from './InteractiveLoader';
@@ -491,10 +491,7 @@ export default function ResultsReport({ household, appliances, details, onRestar
                 <BenchmarkCard householdKwh={household.kwh} numPeople={household.num_people} />
             </div>
 
-            {/* Solar ROI Estimator */}
-            <div className="mb-8" >
-                <SolarCard householdKwh={household.kwh} totalBill={billDetails.total} />
-            </div>
+
 
             {/* WHAT-IF OPTIMIZATION SECTION (Hero Theme) */}
             <div className="section bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-[#334155] p-0 rounded-2xl mb-10 overflow-hidden shadow-2xl shadow-blue-900/10" >

@@ -1,9 +1,9 @@
-/**
+/** 
  * Field Transformation Utilities
  * Transforms UI field names and values to match backend API expectations
  */
 
-/**
+/** 
  * Transform field names from UI format to backend format
  */
 function transformFieldNames(appliance: string, data: Record<string, unknown>): Record<string, unknown> {
@@ -91,7 +91,7 @@ function transformFieldNames(appliance: string, data: Record<string, unknown>): 
   return transformed;
 }
 
-/**
+/** 
  * Transform field values to correct types and formats
  */
 function transformFieldValues(data: Record<string, unknown>): Record<string, unknown> {
@@ -234,7 +234,7 @@ function transformFieldValues(data: Record<string, unknown>): Record<string, unk
   return transformed;
 }
 
-/**
+/** 
  * Derive missing fields from pattern selections
  */
 function deriveFieldsFromPattern(appliance: string, data: Record<string, unknown>): Record<string, unknown> {
@@ -261,7 +261,7 @@ function deriveFieldsFromPattern(appliance: string, data: Record<string, unknown
   return derived;
 }
 
-/**
+/** 
  * Main transformation function - applies all transformations
  */
 export function transformApplianceData(appliance: string, uiData: Record<string, unknown>): Record<string, unknown> {

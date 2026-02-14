@@ -54,7 +54,7 @@ export default function SolarCard({ householdKwh, totalBill }: { householdKwh: n
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-xs font-bold text-yellow-500">PM Surya Ghar Compatible</span>
-                    <span className="text-[10px] text-yellow-600/60">Net Metering Ready</span>
+                    <span className="text-xs text-yellow-600/60">Net Metering Ready</span>
                 </div>
             </div>
 

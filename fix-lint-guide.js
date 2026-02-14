@@ -1,4 +1,4 @@
-/**
+/** 
  * ESLint Auto-Fix Script
  * Run with: node fix-lint.js
  * 

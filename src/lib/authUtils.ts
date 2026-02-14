@@ -1,6 +1,6 @@
 import { supabase } from "./supabaseClient";
 
-/**
+/** 
  * Safely retrieves the current session, handling "Invalid Refresh Token" errors
  * by automatically signing the user out (clearing stale tokens).
  */

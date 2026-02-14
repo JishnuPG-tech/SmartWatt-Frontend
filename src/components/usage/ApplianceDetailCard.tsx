@@ -129,9 +129,9 @@ export function ApplianceDetailCard({
                                 >
                                     <div className="flex flex-col gap-1">
                                         <span className={`text-sm font-medium ${selectedPattern === opt.value ? 'text-blue-300' : 'text-slate-200'}`}>
-                                            {opt.label.includes('(') ? opt.label.split('(')[0].trim() : opt.label}
+                                            {opt.label?.includes('(') ? opt.label.split('(')[0].trim() : (opt.label || '')}
                                         </span>
-                                        {opt.label.includes('(') && (
+                                        {opt.label?.includes('(') && (
                                             <span className={`text-xs ${selectedPattern === opt.value ? 'text-blue-200/70' : 'text-slate-500'}`}>
                                                 {opt.label.match(/\((.*?)\)/)?.[1]}
                                                 {opt.label.includes(') - ') ? ` • ${opt.label.split(') - ')[1]}` : ''}

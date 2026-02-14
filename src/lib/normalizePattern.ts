@@ -6,6 +6,16 @@ export interface NormalizedUsage {
 }
 
 export function normalizePattern(text: string): NormalizedUsage {
+    // Handle null/undefined text
+    if (!text || typeof text !== 'string') {
+        return {
+            category: "Unknown",
+            min_hours: 0,
+            max_hours: 0,
+            avg_hours: 0
+        };
+    }
+
     // 1. Extract Category (Text before the parenthesis or the whole text if no parens)
     const categoryMatch = text.match(/^([^(]+)/);
     const category = categoryMatch ? categoryMatch[1].trim() : "Unknown";

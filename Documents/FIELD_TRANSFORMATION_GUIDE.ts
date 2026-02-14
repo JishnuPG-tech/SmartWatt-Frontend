@@ -1,4 +1,4 @@
-/**
+/ 
  * FIELD NAME TRANSFORMATION GUIDE
  * 
  * This file explains WHY and HOW frontend needs to transform field names
@@ -84,7 +84,7 @@ const correctWMData = {
 // TRANSFORMATION FUNCTIONS NEEDED
 // ============================================================================
 
-/**
+/ 
  * 1. Transform field NAMES
  */
 function transformFieldNames(appliance: string, data: any): any {
@@ -133,7 +133,7 @@ function transformFieldNames(appliance: string, data: any): any {
   return transformed;
 }
 
-/**
+/ 
  * 2. Transform field VALUES
  */
 function transformFieldValues(appliance: string, data: any): any {
@@ -195,7 +195,7 @@ function transformFieldValues(appliance: string, data: any): any {
   return transformed;
 }
 
-/**
+/ 
  * 3. Derive missing fields from patterns
  */
 function deriveFieldsFromPattern(appliance: string, data: any): any {
@@ -223,7 +223,7 @@ function deriveFieldsFromPattern(appliance: string, data: any): any {
   return derived;
 }
 
-/**
+/ 
  * 4. COMPLETE TRANSFORMATION PIPELINE
  */
 export function transformApplianceData(appliance: string, uiData: any): any {
