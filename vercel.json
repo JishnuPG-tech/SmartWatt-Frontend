@@ -1,5 +1,5 @@
 {
-    "installCommand": "npm ci",
+    "installCommand": "npm install --prefer-online --no-audit",
     "buildCommand": "npm run build",
     "outputDirectory": ".next",
     "framework": "nextjs",
@@ -8,5 +8,10 @@
             "source": "/api/:path*",
             "destination": "https://smartwatt-backend.onrender.com/:path*"
         }
-    ]
+    ],
+    "env": {
+        "NPM_CONFIG_FETCH_RETRIES": "5",
+        "NPM_CONFIG_FETCH_RETRY_MINTIMEOUT": "10000",
+        "NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT": "60000"
+    }
 }
