@@ -1,5 +1,5 @@
 {
-    "installCommand": "npm install --prefer-online --no-audit",
+    "installCommand": "npm cache clean --force && npm install --force --prefer-online --no-audit",
     "buildCommand": "npm run build",
     "outputDirectory": ".next",
     "framework": "nextjs",
