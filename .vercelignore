@@ -1,0 +1,4 @@
+# Ignore parent directory lockfiles to prevent workspace confusion
+../../package-lock.json
+../../pnpm-lock.yaml
+../../yarn.lock
