@@ -6,7 +6,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SmartWatt - Kerala Energy Estimator",
-  description: "Professional energy consumption analysis tool for Kerala facilities",
+  description:
+    "Professional energy consumption analysis tool for Kerala facilities",
 };
 
 export const viewport: Viewport = {
@@ -22,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased font-sans`}
-      >
+      <body className={`antialiased font-sans`}>
         <div className="app-wrapper">
           {children}
           <Toaster position="top-center" richColors theme="dark" />

@@ -1,69 +1,100 @@
-# SmartWatt AI - Frontend ⚡
+<p align="center">
+	<img src="https://img.shields.io/badge/Next.js-16-111111" alt="Next.js" />
+	<img src="https://img.shields.io/badge/React-19-149ECA" alt="React" />
+	<img src="https://img.shields.io/badge/TypeScript-5-3178C6" alt="TypeScript" />
+	<img src="https://img.shields.io/badge/Tailwind-4-0EA5E9" alt="Tailwind" />
+	<img src="https://img.shields.io/badge/Recharts-Visualization-1E88E5" alt="Recharts" />
+	<img src="https://img.shields.io/badge/License-MIT-2E7D32" alt="License" />
+</p>
 
- Physics-Informed Integrated Hybrid AI Architecture for Energy Estimation. 
+# SmartWatt Frontend
 
-![SmartWatt Status](https://img.shields.io/badge/Status-Beta-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Next.js](https://img.shields.io/badge/Next.js-15.0-black)
+SmartWatt Frontend is a Next.js application for household energy estimation workflows, including guided data input, appliance-level analytics, and historical dashboard views.
 
-SmartWatt is a next-generation residential energy estimation tool designed for Kerala households. It solves the "Linear Load Paradox" by combining Deep Learning (for complex loads like ACs and Fridges) with Physics-based constraints (for linear loads like Fans and Lights).
+## Core Capabilities
 
-This repository contains the  Frontend  built with [Next.js](https://nextjs.org/), offering a responsive, modern interface for users to input their appliance details and receive highly accurate bill predictions.
+- Multi-step assessment flow for household and appliance details.
+- Quick and detailed analysis modes.
+- Interactive charts for consumption distribution and trends.
+- Assessment history with dashboard-level exploration.
+- Authentication and persistence integration with Supabase.
+- PDF report generation and what-if simulation display.
 
----
+## Interface Preview
 
-## 🚀 Features
+| Assessment Flow                                                                             | Dashboard                                                                                      |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| <img src="../docs/screenshots/smartwatt-workflow.png" alt="Assessment flow" width="100%" /> | <img src="../docs/screenshots/frontend-dashboard.png" alt="Frontend dashboard" width="100%" /> |
 
--    Hybrid AI Interface : Seamlessly gathers user inputs that feed into our Dual-Inference Engine.
--    Dynamic Dashboard : Visualizes energy consumption with interactive charts (Recharts/Plotly).
--    Smart Recommendations : Provides AI-generated insights to reduce electricity bills (e.g., "Switching to a 5-star AC saves ₹400/month").
--    User Intent Override : Respects manual usage inputs while intelligently adjusting efficiency factors in the background.
--    Responsive Design : Optimized for both Desktop and Mobile devices.
+If images are not visible yet, add files in `docs/screenshots/` from the repository root.
 
-## 🛠️ Tech Stack
+## Technology Stack
 
--    Framework : [Next.js](https://nextjs.org/) (React)
--    Styling : [Tailwind CSS](https://tailwindcss.com/)
--    Visualization : [Recharts](https://recharts.org/), Plotly.js
--    State Management : React Hooks
--    Language : TypeScript
+- Next.js 16
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- Recharts and Plotly
+- Axios
+- Supabase JavaScript client
 
-## 📦 Getting Started
+## Project Layout
 
-1.   Clone the repository: 
-    ```bash
-    git clone https://github.com/JishnuPG-tech/SmartWatt-Frontend.git
-    cd SmartWatt-Frontend
-    ```
+- `src/app/`: route-based pages including main flow, authentication, and dashboard.
+- `src/components/`: reusable UI and feature components.
+- `src/hooks/`: analysis and simulation orchestration hooks.
+- `src/lib/`: API modules, transformations, utilities, and types.
+- `src/config/`: appliance and usage form metadata.
 
-2.   Install dependencies: 
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
+## Local Setup
 
-3.   Run the development server: 
-    ```bash
-    npm run dev
-    ```
+1. Move to the frontend directory.
 
-4.   Open in Browser: 
-    Navigate to [http://localhost:3000](http://localhost:3000).
+```bash
+cd Frontend
+```
 
-## 🚀 Deployment
+2. Install dependencies.
 
-This project is optimized for deployment on  Vercel .
+```bash
+npm install
+```
 
-1.  Push your code to GitHub.
-2.  Import the repository into Vercel.
-3.  Set the `NEXT_PUBLIC_BACKEND_URL` environment variable to your backend URL (e.g., your Render hosted API).
-4.  Click  Deploy .
+3. Configure environment variables.
 
-## 📄 License 
+```bash
+copy .env.example .env.local
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+4. Start the development server.
 
----
+```bash
+npm run dev
+```
 
-*Developed by the SmartWatt AI Team.*
+5. Open http://localhost:3000.
+
+## Build and Run
+
+```bash
+npm run build
+npm run start
+```
+
+## UX Notes
+
+- The interface supports quick and detailed assessment modes.
+- Data-entry steps are designed for predictable user progression.
+- Result visualizations are optimized for desktop and mobile layouts.
+
+## Environment
+
+At minimum, configure the backend API URL:
+
+- `NEXT_PUBLIC_BACKEND_URL`
+
+Additional Supabase variables can be configured based on deployment setup.
+
+## License
+
+Licensed under the MIT License. See `LICENSE`.
